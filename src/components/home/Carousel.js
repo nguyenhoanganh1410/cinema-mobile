@@ -1,0 +1,92 @@
+import React, { useState } from "react";
+import { StyleSheet, Text, View, SafeAreaView,ScrollView, Dimensions, Image } from "react-native";
+import PropTypes from 'prop-types';
+const images = [
+  "https://www.bhdstar.vn/wp-content/uploads/2018/03/Visa-x-BHD-WEB.jpg",
+  "https://www.bhdstar.vn/wp-content/uploads/2018/03/Traoquayeuthuong.1920x1080-1.png",
+  "https://cdn.pixabay.com/photo/2017/11/24/10/43/ticket-2974645__340.jpg",
+  "https://cdn.pixabay.com/photo/2017/03/07/23/33/technology-2125547__340.jpg"
+]
+
+const WIDTH = Dimensions.get("window").width
+const HEIGHT = Dimensions.get("window").height
+const Carousel = () => {
+  const [imageActive, setImageACtive] = useState(0)
+
+  const onchange = (nativeEvent ) =>{
+    if(nativeEvent){
+      const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width)
+      if(slide != imageActive){
+        setImageACtive(slide)
+      }
+    }
+  }
+  return (
+    <View style={styles.container}>
+      <View style={styles.wrap}>
+          <ScrollView
+            onScroll = {({nativeEvent}) => onchange(nativeEvent)}
+            showsHorizontalScrollIndicator={false}
+            pagingEnabled
+            horizontal
+            style={styles.wrap}
+          >
+            
+            {
+              images.map((e, index) =>{
+                return <Image key={e}
+                      resizeMode="stretch"
+                      style={styles.wrap}
+                      source={{uri:e}}
+                    />
+                
+              })
+            }
+          </ScrollView>
+      </View>
+      <View style={styles.wrapDot}>
+            {
+              images.map((e, index)=>{
+                return  <Text
+                key={e}
+                style={imageActive == index ? styles.dotActive : styles.dot}
+              >
+                 ●
+              </Text>
+              })
+            }
+      </View>
+    </View>
+  )
+}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+   
+  },
+
+  wrap : {
+  
+    width:WIDTH,
+    height:"100%"
+  },
+  wrapDot : {
+    position:"absolute",
+    bottom:10,
+    left:"50%",
+    flexDirection:"row",
+    alignSelf:" center",
+    
+  },
+  dotActive : {
+    margin: 3,
+    color:"black"
+  },
+  dot: {
+    margin: 3,
+    color:"white"
+  }
+
+});
+
+export default Carousel;
