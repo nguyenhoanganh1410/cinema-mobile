@@ -10,6 +10,8 @@ import {
   Button
 } from 'react-native';
 import AntDesign from "react-native-vector-icons/AntDesign";
+import movieApi from '../../api/movieApi';
+import { useNavigation } from '@react-navigation/native';
 
 
 const ENTRIES1 = [
@@ -42,22 +44,23 @@ const ENTRIES1 = [
 const {width: screenWidth} = Dimensions.get('window');
 
 const CarouselCards = props => {
-  const [entries, setEntries] = useState([]);
+  const [films, setFilms] = useState([])
   const carouselRef = useRef(null);
+  const navigation = useNavigation()
 
   const goForward = () => {
     carouselRef.current.snapToNext();
   };
 
-  useEffect(() => {
-    setEntries(ENTRIES1);
-  }, []);
+  const handleOnpress = (id) =>{
+    navigation.navigate("FilmDetail", {id})
+  }
 
   const renderItem = ({item, index}, parallaxProps) => {
     return (
-      <View style={styles.item}>
+      <TouchableOpacity style={styles.item} onPress={()=>handleOnpress(item?.id)}>
         <ParallaxImage
-          source={{uri: item.illustration}}
+          source={{uri: item?.image ? item?.image : 'https://i.imgur.com/2nCt3Sbl.jpg' }}
           containerStyle={styles.imageContainer}
           style={styles.image}
           parallaxFactor={0.4}
@@ -65,18 +68,23 @@ const CarouselCards = props => {
         />
         <View style={styles.blockContent}>
           <Text style={styles.title} numberOfLines={2}>
-            {item.title}
+            {item?.nameMovie}
           </Text>
           <Text style={styles.time} numberOfLines={2}>
-          <AntDesign name="clockcircleo" size={12} color="#900" /> 93 minutes
+          <AntDesign name="clockcircleo" size={12} color="#900" /> {item?.duration} minutes
           </Text>
         </View>
-       {/* // <Button>Booking</Button> */}
-     
-      </View>
+      </TouchableOpacity>
     );
   };
+  useEffect(()=>{
 
+    const getFilms = async () =>{
+      const data = await movieApi.getMovies();
+      setFilms(data)
+    }
+    getFilms()
+  },[])
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={goForward}>
@@ -87,7 +95,7 @@ const CarouselCards = props => {
         sliderWidth={screenWidth}
         sliderHeight={screenWidth}
         itemWidth={screenWidth - 60}
-        data={entries}
+        data={films}
         renderItem={renderItem}
         hasParallaxImages={true}
       />

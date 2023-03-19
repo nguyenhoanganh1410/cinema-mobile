@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { SafeAreaView, Image,StyleSheet, TouchableOpacity, Text, View } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
-
+import { AlertDialog, Button, Center, NativeBaseProvider } from "native-base";
+import { useNavigation } from "@react-navigation/native";
+import Contex from "../store/Context";
+import { SetUserLogin } from "../store/Actions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const data = [
   {
     id:"id00001",
@@ -19,7 +23,7 @@ const data = [
     iconName:"lock",
   },
   {
-    id:"id00004",
+    id:"id00084",
     name:"Payment History",
     iconName:"back",
   },
@@ -27,42 +31,98 @@ const data = [
     id:"id00005",
     name:"Log Out",
     iconName:"logout",
+    onPress:"showModel"
   },
 ]
-const ProfilePage = () => (
+
+
+const ProfilePage = () => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  
+  const onClose = () => setIsOpen(false);
+
+  const navigation = useNavigation()
+
+  const { state, depatch } = useContext(Contex);
+  const { userLogin } = state;
+ 
+
+  const handleLogOut = async () =>{
+    setIsOpen(false);
+    navigation.navigate("Home")
+    depatch(SetUserLogin(null))
+    await AsyncStorage.removeItem("user");
+  }
+  
+  const cancelRef = React.useRef(null);
+
+
+  const handleOnPress = (text) =>{
+    if(text === "id00005"){
+      setIsOpen(!isOpen)
+    }
+  } 
+  
+  return (
+  
   <SafeAreaView style={styles.container}>
     <View style={styles.container}>
-    <Text style={styles.title}>ACCOUNT INFOMATION</Text>
-    <View style={styles.profile_top}>
-      <Text style={styles.name}>Nguyen Anh</Text>
-      <Image
-        style={styles.tinyLogo}
-        source={{
-          uri: 'https://www.bhdstar.vn/wp-content/uploads/2017/09/STAR.png',
-        }}
-      />
+      <Text style={styles.title}>ACCOUNT INFOMATION</Text>
+      <View style={styles.profile_top}>
+        <Text style={styles.name}>Nguyen Anh</Text>
+        <Image
+          style={styles.tinyLogo}
+          source={{
+            uri: 'https://www.bhdstar.vn/wp-content/uploads/2017/09/STAR.png',
+          }}
+        />
+      </View>
+      <View style={styles.profile_bottom}>
+        {
+          data.map(val =>{
+            return (
+              <TouchableOpacity style={styles.items} key={val?.id} onPress={()=>handleOnPress(val?.id)}>
+                <View style={styles.items_left}>
+                  <AntDesign style={styles.text_iconright} name={val?.iconName} size={16} />
+                  <Text style={styles.text_right}>{val?.name}</Text>
+                </View>
+                <AntDesign style={styles.text_right} name="right" size={16} />
+            </TouchableOpacity>
+            )
+          })
+        }
+      </View>
     </View>
-    <View style={styles.profile_bottom}>
-      {
-        data.map(val =>{
-          return (
-            <TouchableOpacity style={styles.items}>
-            <View style={styles.items_left}>
-              <AntDesign style={styles.text_iconright} name={val?.iconName} size={16} />
-              <Text style={styles.text_right}>{val?.name}</Text>
-            </View>
-            <AntDesign style={styles.text_right} name="right" size={16} />
-          </TouchableOpacity>
-          )
-        })
-      }
-    </View>
+    <View>
 
-    
-
+     <Center>
+      <AlertDialog leastDestructiveRef={cancelRef} isOpen={isOpen} onClose={onClose}>
+        <AlertDialog.Content>
+          <AlertDialog.CloseButton />
+          <AlertDialog.Header>Sign Out</AlertDialog.Header>
+          <AlertDialog.Body>
+              Are you sure you want to sign out?
+          </AlertDialog.Body>
+          <AlertDialog.Footer>
+            <Button.Group space={2}>
+              <Button variant="unstyled" colorScheme="coolGray" onPress={onClose} ref={cancelRef}>
+                Cancel
+              </Button>
+              <Button colorScheme="green" onPress={handleLogOut}>
+                Accept
+              </Button>
+            </Button.Group>
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog>
+     </Center>
     </View>
   </SafeAreaView>
-);
+  )
+
+}
+
+
 
 const styles = StyleSheet.create({
   container: {

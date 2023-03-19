@@ -9,6 +9,7 @@ import Promotion from "../pages/Promotion";
 import ProfilePage from "../pages/ProfilePage";
  import Login from "../pages/LoginPage";
  import Register from "../pages/RegisterPage";
+ import DetailsFilm from "../pages/DetailsFilm";
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,7 @@ const HomeStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen  options={{ headerShown: false}} name="HomePage" component={HomePage} />
+      <Stack.Screen  options={{ headerShown: false}} name="FilmDetail" component={DetailsFilm} />
     </Stack.Navigator>
   );
 }

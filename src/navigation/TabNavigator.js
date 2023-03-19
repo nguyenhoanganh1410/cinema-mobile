@@ -7,6 +7,7 @@ import {  HomeStackNavigator, ShowStackNavigator, PromotionStackNavigator, Profi
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Contex from "../store/Context";
 import { SetUserLogin } from "../store/Actions";
+import DetailsFilm from "../pages/DetailsFilm";
 
 const Tab = createBottomTabNavigator();
 
@@ -31,13 +32,13 @@ const TabNavigator = () => {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === "Home") {
+            if (route.name === "Home1") {
               iconName = focused ? "home" : "home";
-            } else if (route.name === "Showtimes") {
+            } else if (route.name === "Showtimes1") {
               iconName = focused ? "ios-list" : "ios-list";
-            } else if (route.name === "Promotion") {
+            } else if (route.name === "Promotion1") {
               iconName = focused ? "ios-list" : "ios-list";
-            } else if (route.name === "Profile") {
+            } else if (route.name === "Profile1") {
               iconName = focused ? "person" : "person";
             }
 
@@ -54,10 +55,10 @@ const TabNavigator = () => {
         })}
       >
       
-      <Tab.Screen options={{ headerShown: false}} name="Home" component={HomeStackNavigator} />
-      <Tab.Screen  options={{ headerShown: false}} name="Showtimes" component={ShowStackNavigator} />
-      <Tab.Screen   options={{ headerShown: false}}name="Promotion" component={PromotionStackNavigator} />
-      <Tab.Screen   options={{ headerShown: false}}name="Profile" component={userLogin ? ProfileStackNavigator: LoginStackNavigator} />
+      <Tab.Screen options={{ headerShown: false}} name="Home1" component={HomeStackNavigator} />
+      <Tab.Screen  options={{ headerShown: false}} name="Showtimes1" component={ShowStackNavigator} />
+      <Tab.Screen   options={{ headerShown: false}}name="Promotion1" component={PromotionStackNavigator} />
+      <Tab.Screen   options={{ headerShown: false}}name="Profile1" component={userLogin ? ProfileStackNavigator: LoginStackNavigator} />
     </Tab.Navigator>
   );
 };
