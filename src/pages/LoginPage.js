@@ -141,10 +141,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
    // backgroundColor:"red"
   },
-  // imageView: {
-  //   height: 100,
-  //   width: 100,
-  // },
   downView: {
     flex: 1.5,
 

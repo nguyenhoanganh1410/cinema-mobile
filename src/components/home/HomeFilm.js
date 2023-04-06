@@ -1,75 +1,54 @@
-import React, { useState } from "react";
-import { Button, TouchableOpacity } from "react-native";
-import { StyleSheet, Text, View, SafeAreaView,ScrollView, Dimensions, Image } from "react-native";
-import AntDesign from "react-native-vector-icons/AntDesign";
 
-import CarouselCards from "./CarouselCards";
+import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { useEffect } from 'react';
+import { TouchableOpacity } from 'react-native';
+import { Image } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import { FlatGrid } from 'react-native-super-grid';
+import movieApi from '../../api/movieApi';
+import useHomeFilmHook from './ useHomeFilmHook';
 
-const HomeFilm = () => {
-  
-    const [index, setIndex] = React.useState(0);
+export default function Example() {
+  const {items, handleOnpress} = useHomeFilmHook()
 
-    return (
-      <View style={styles.container}>
-       
-       <CarouselCards />
-         <TouchableOpacity style={styles.buttonGPlusStyle} activeOpacity={0.5}>
-          
-          <AntDesign name="clockcircleo" size={16} />
-          <Text style={styles.buttonTextStyle}>Booking</Text>
+  return (
+    <>
+ 
+    <FlatGrid
+      itemDimension={130}
+      data={items}
+      style={styles.gridView}
+      spacing={14}
+      renderItem={({ item }) => (
+        <TouchableOpacity onPress={()=>handleOnpress(item?.id)}>
+           <Image
+                style={styles.tinyLogo}
+                source={{   
+                uri:  item?.image ? item?.image : 'https://i.imgur.com/2nCt3Sbl.jpg'
+                }}
+            />
+            <Text  style={styles.text} >{item?.nameMovie.length < 20? item?.nameMovie : item?.nameMovie.substring(0,18) + '...'}</Text>
         </TouchableOpacity>
-      </View>)
+      )}
+    /></>
+  );
 }
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 2,
-    backgroundColor:"black",
-    paddingTop:24,
-    display:"flex",
-    flexDirection:"column",
-    justifyContent:"center",
-    alignItems:"center"
+  gridView: {
+    marginTop: 10,
+    flex: 1,
   },
-  custom : {
-    marginLeft:12,
-    marginRight:12,
-    marginBottom:12,
-    borderRadius:4,
-    backgroundColor:"#423F3E",
-    paddingBottom:4,
-    paddingTop:4,
-    
-  },
-  customItem : {
-    borderRadius:4,
-    height:45,
-    
-  },
-  button : {
-    backgroundColor:"#6ECB63",
-    width:"60%",
+  tinyLogo : {
+   
     borderRadius:6,
-    fontWeight:700,
-    marginBottom:24
-  },
-  buttonGPlusStyle: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent:"center",
-    backgroundColor: '#79D70F',
-    height: 40,
-    borderRadius: 5,
-    width:"60%",
-    marginBottom:24
-  },
+    height: 300
 
-  buttonTextStyle: {
-    color: '#fff',
-    fontWeight:"600",
-    fontSize:16,
-    marginLeft:10
   },
-
+  text:{
+    marginTop:6,
+    fontSize:12
+  },
+  
 });
-
-export default HomeFilm;

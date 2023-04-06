@@ -10,6 +10,7 @@ import ProfilePage from "../pages/ProfilePage";
  import Login from "../pages/LoginPage";
  import Register from "../pages/RegisterPage";
  import DetailsFilm from "../pages/DetailsFilm";
+import PickFilmScreen from "../pages/PickFilmScreen";
 
 const Stack = createStackNavigator();
 
@@ -26,6 +27,7 @@ const HomeStackNavigator = () => {
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen  options={{ headerShown: false}} name="HomePage" component={HomePage} />
       <Stack.Screen  options={{ headerShown: false}} name="FilmDetail" component={DetailsFilm} />
+      <Stack.Screen  options={{ headerShown: false}} name="PickFilm" component={PickFilmScreen} />
     </Stack.Navigator>
   );
 }

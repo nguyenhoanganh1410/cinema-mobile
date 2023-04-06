@@ -32,13 +32,13 @@ const TabNavigator = () => {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === "Home1") {
+            if (route.name === "Home") {
               iconName = focused ? "home" : "home";
-            } else if (route.name === "Showtimes1") {
+            } else if (route.name === "Showtimes") {
               iconName = focused ? "ios-list" : "ios-list";
-            } else if (route.name === "Promotion1") {
+            } else if (route.name === "Promotion") {
               iconName = focused ? "ios-list" : "ios-list";
-            } else if (route.name === "Profile1") {
+            } else if (route.name === "Profile") {
               iconName = focused ? "person" : "person";
             }
 
@@ -55,10 +55,10 @@ const TabNavigator = () => {
         })}
       >
       
-      <Tab.Screen options={{ headerShown: false}} name="Home1" component={HomeStackNavigator} />
-      <Tab.Screen  options={{ headerShown: false}} name="Showtimes1" component={ShowStackNavigator} />
-      <Tab.Screen   options={{ headerShown: false}}name="Promotion1" component={PromotionStackNavigator} />
-      <Tab.Screen   options={{ headerShown: false}}name="Profile1" component={userLogin ? ProfileStackNavigator: LoginStackNavigator} />
+      <Tab.Screen options={{ headerShown: false}} name="Home" component={HomeStackNavigator} />
+      <Tab.Screen  options={{ headerShown: false}} name="Showtimes" component={ShowStackNavigator} />
+      <Tab.Screen   options={{ headerShown: false}}name="Promotion" component={PromotionStackNavigator} />
+      <Tab.Screen   options={{ headerShown: false}}name="Profile" component={userLogin ? ProfileStackNavigator: LoginStackNavigator} />
     </Tab.Navigator>
   );
 };

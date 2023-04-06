@@ -2,14 +2,17 @@ import { Box } from "native-base";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, SafeAreaView,ScrollView, TouchableOpacity, Image } from "react-native";
 import { Text, VStack, Center, NativeBaseProvider } from "native-base";
+import Video from 'react-native-video';
 import AntDesign from "react-native-vector-icons/AntDesign";
+import video from '../images/video.mp4'
+import YouTube from 'react-native-youtube';
+import Carousel from "../components/home/Carousel";
 import movieApi from '../api/movieApi';
-import { useNavigation } from "@react-navigation/native";
-
-const DetailsFilm = ({route}) => {
+import { log } from "react-native-reanimated";
+const PickFilmScreen = ({route}) => {
   const [film, setFilm] = useState(null);
   const {id } = route.params;
-  const navigation = useNavigation()
+  const [isActive, setIsActive] = useState(0)
   console.log(film)
   useEffect(()=>{
     const getFilm = async (id) =>{
@@ -19,9 +22,6 @@ const DetailsFilm = ({route}) => {
 
     getFilm(id)
   }, [])
-  const handleOnpress = (id) =>{
-    navigation.navigate("PickFilm", {id})
-  }
     return (
         <SafeAreaView style={styles.container}>
                     
@@ -42,48 +42,64 @@ const DetailsFilm = ({route}) => {
                             <Text fontSize="xs" color="#DFD3C3">Comedy, Romatic </Text>
                             <Text fontSize="xs" color="#DFD3C3">{film?.duration} minus</Text>
                         </Box>
-                        <Box>
-                            <Text fontSize="md" bold color="white" style={{textTransform:"capitalize"}}>Description </Text>
-                            <Text fontSize="xs" color="white">
-                                {film?.desc}
-                            </Text>
-                        </Box>
                     </View>
-                    <View style={styles.bottom_one}>
-                        <Box style={{flexDirection:"row", justifyContent:"space-between", marginBottom:6, marginTop:6}}>
-                            <Text fontSize="sm" color="white">Released Date </Text>
-                            <Text fontSize="sm" color="#DFD3C3">{film?.releaseDate.substring(0,10)}</Text>
-                        </Box>
-                        <Box style={{flexDirection:"row", justifyContent:"space-between", marginBottom:6, marginTop:6}}>
-                        <Text fontSize="sm" color="white">Language </Text>
-                            <Text fontSize="xs" color="#DFD3C3">{film?.language}</Text>
-                        </Box>
-                        <Box style={{flexDirection:"row", justifyContent:"space-between", marginBottom:6, marginTop:6}}>
-                        <Text fontSize="sm" color="white">Classify</Text>
-                            <Text fontSize="xs" color="#DFD3C3">{film?.classify}</Text>
-                        </Box>
+                    <View style={styles.times}>
+                      <TouchableOpacity style={[styles.time, styles.active]}>
+                        <Text style={styles.timeText}>03</Text>
+                        <Text style={styles.timeDay}>T2</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.time}>
+                        <Text style={styles.timeText}>03</Text>
+                        <Text style={styles.timeDay}>T2</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.time}>
+                        <Text style={styles.timeText}>03</Text>
+                        <Text style={styles.timeDay}>T2</Text>
+                      </TouchableOpacity>
                     </View>
-                    <View style={styles.bottom_one}>
-                        <Box style={{flexDirection:"row", justifyContent:"space-between", marginBottom:6, marginTop:6}}>
-                        <Text fontSize="sm" color="white">Director </Text>
-                            <Text fontSize="xs" color="#DFD3C3">{film?.director}</Text>
-                        </Box>
-                        <Box style={{flexDirection:"row", justifyContent:"space-between", marginBottom:6, marginTop:6}}>
-                        <Text fontSize="sm" color="white">Cast </Text>
-                            <Text fontSize="xs" color="#DFD3C3">{film?.cast}</Text>
-                        </Box>
-                        <TouchableOpacity style={styles.buttonGPlusStyle} activeOpacity={0.5} onPress={() => handleOnpress(film?.id)}>
-                
-                            <AntDesign name="clockcircleo" size={16} />
-                            <Text style={styles.buttonTextStyle}>Booking</Text>
-                        </TouchableOpacity>
-                    </View>
+             
                 </View>
             </ScrollView>
         </SafeAreaView>
     )
 }
 const styles = StyleSheet.create({
+  times : {
+    display:'flex',
+    flexDirection:'row',
+    marginTop :10,
+    paddingHorizontal:12
+  },
+  time: {
+    width:50,
+    backgroundColor:'black',
+    display:"flex",
+    flexDirection:'column',
+    justifyContent:'center',
+    alignItems: 'center',
+    paddingHorizontal:8,
+    paddingVertical:8,
+    marginRight:10,
+    borderRadius:4,
+    
+    
+  },
+  active:{
+    backgroundColor: '#79D70F',
+    color:"white",
+  },
+  timeText: {
+
+    fontSize:18,
+    color:"#E5E0FF",
+    fontWeight:'700'
+  },
+  timeDay:{
+    color:"white",
+    fontSize:14,
+    fontWeight:500
+  },
+
   container: {
     flex: 1,
     backgroundColor:"black"
@@ -142,4 +158,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailsFilm;
+export default PickFilmScreen;
