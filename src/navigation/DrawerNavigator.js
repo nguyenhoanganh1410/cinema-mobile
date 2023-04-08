@@ -11,7 +11,7 @@ const Drawer = createDrawerNavigator();
 const DrawerNavigator = () => {
   return (
   <Drawer.Navigator>
-    <Drawer.Screen options={{headerShown: false}} name="Home" component={TabNavigator} />  
+    <Drawer.Screen options={{headerShown: false}} name="HomeSreen" component={TabNavigator} />  
   </Drawer.Navigator>
   );
 }

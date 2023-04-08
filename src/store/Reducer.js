@@ -1,10 +1,11 @@
-import { SET_CART, SET_USERLOGIN } from "./Actions";
+import { SET_BOOKING, SET_CART, SET_USERLOGIN } from "./Actions";
 
 //innite state
 const initState = {
   foodChoise: null,
   cart: [],
   userLogin: null,
+  booking: null,
 };
 
 //depatch
@@ -21,6 +22,13 @@ const Reducer = (state, action) => {
       return {
         ...state,
         userLogin: action.payload,
+      };
+  }
+  switch (action.type) {
+    case SET_BOOKING:
+      return {
+        ...state,
+        booking: action.payload,
       };
   }
 };

@@ -34,11 +34,11 @@ const TabNavigator = () => {
 
             if (route.name === "Home") {
               iconName = focused ? "home" : "home";
-            } else if (route.name === "Showtimes") {
+            } else if (route.name === "Rạp") {
               iconName = focused ? "ios-list" : "ios-list";
-            } else if (route.name === "Promotion") {
+            } else if (route.name === "Khuyến mãi") {
               iconName = focused ? "ios-list" : "ios-list";
-            } else if (route.name === "Profile") {
+            } else if (route.name === "Tài khoản") {
               iconName = focused ? "person" : "person";
             }
 
@@ -56,9 +56,9 @@ const TabNavigator = () => {
       >
       
       <Tab.Screen options={{ headerShown: false}} name="Home" component={HomeStackNavigator} />
-      <Tab.Screen  options={{ headerShown: false}} name="Showtimes" component={ShowStackNavigator} />
-      <Tab.Screen   options={{ headerShown: false}}name="Promotion" component={PromotionStackNavigator} />
-      <Tab.Screen   options={{ headerShown: false}}name="Profile" component={userLogin ? ProfileStackNavigator: LoginStackNavigator} />
+      <Tab.Screen  options={{ headerShown: false}} name="Rạp" component={ShowStackNavigator} />
+      <Tab.Screen   options={{ headerShown: false}}name="Khuyến mãi" component={PromotionStackNavigator} />
+      <Tab.Screen   options={{ headerShown: false}}name="Tài khoản" component={userLogin ? ProfileStackNavigator: LoginStackNavigator} />
     </Tab.Navigator>
   );
 };

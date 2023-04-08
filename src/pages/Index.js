@@ -6,15 +6,16 @@ import { NavigationContainer } from "@react-navigation/native";
 
 import TabNavigator from "../navigation/TabNavigator";
 import DrawerNavigator from "../navigation/DrawerNavigator";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import TopBarNavigation from "../navigation/TopBarNavigation";
 
 const Tab = createBottomTabNavigator();
-
 
 export default function Index() {
   return (
     <NavigationContainer>
-      <DrawerNavigator />  
+      <DrawerNavigator />
+      {/* <TopBarNavigation /> */}
     </NavigationContainer>
   );
 }
