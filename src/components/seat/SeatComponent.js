@@ -4,6 +4,7 @@ import { Button, StyleSheet, TouchableOpacity } from "react-native";
 const SeatComponent = ({ item, handlePress, bgColor, color }) => {
   return (
     <TouchableOpacity
+      key={Math.random()}
       onPress={() => handlePress(item)}
       style={[
         styles.conBlock,

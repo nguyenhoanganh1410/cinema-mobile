@@ -5,6 +5,7 @@ import { getPrice } from "../../service/PriceService";
 
 import Contex from "../../store/Context";
 import { useNavigation } from "@react-navigation/native";
+import { SetBooking } from "../../store/Actions";
 
 const usePickSeatHook = (url) => {
   const { state, depatch } = useContext(Contex);
@@ -58,6 +59,8 @@ const usePickSeatHook = (url) => {
       alert("Chưa chọn ghế!");
       return;
     }
+
+    depatch(SetBooking({ ...booking, seats: seatPicked }));
     navigation.navigate("PickProducts");
   };
 

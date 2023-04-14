@@ -14,6 +14,7 @@ import PickFilmScreen from "../pages/PickFilmScreen";
 import TopBarNavigation from "./TopBarNavigation";
 import PickSeatComponent from "../components/seat/PickSeatComponent";
 import PickProduct from "../components/product/PickProduct";
+import BookingPreview from "../components/booking/BookingPreview";
 
 const Stack = createStackNavigator();
 
@@ -52,6 +53,11 @@ const HomeStackNavigator = () => {
         options={{ headerShown: false }}
         name="PickProducts"
         component={PickProduct}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="BookingPreview"
+        component={BookingPreview}
       />
     </Stack.Navigator>
   );

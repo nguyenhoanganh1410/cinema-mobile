@@ -55,7 +55,23 @@ const useShowFilmHook = (url) => {
               return val.id === item.Show.idCinema;
             });
 
-            return { name: val?.name, dataFilter };
+            var now = moment().format(dateFormatQuery);
+            const dataFinal = dataFilter.map((val) => {
+              if (val?.showDate === now) {
+                var cdt = moment(val?.ShowTime?.showTime, "HH:mm");
+                const hour = moment().get("hour");
+                const minus = moment().get("minute");
+                const showHour = cdt.get("hour");
+                const showMinus = cdt.get("minute");
+
+                if (showHour < hour) return { ...val, disable: true };
+                else if (showHour === hour && showMinus < minus)
+                  return { ...val, disable: true };
+              }
+              return { ...val, disable: false };
+            });
+
+            return { name: val?.name, dataFilter: dataFinal };
           });
 
           setShows(dataResult);

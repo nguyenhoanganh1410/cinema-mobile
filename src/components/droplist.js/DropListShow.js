@@ -32,6 +32,7 @@ const DropListShow = ({ idx, status, show }) => {
       {showComponent.idx === idx && showComponent.status === status ? (
         <View style={styles.shows}>
           {dataFilter?.map((val) => {
+            if (val?.disable) return null;
             return (
               <TouchableOpacity
                 onPress={() => handleClick(val)}

@@ -101,7 +101,14 @@ const ShowFilm = () => {
             ) : (
               <>
                 {shows?.map((val, idx) => {
-                  return <DropListShow idx={idx} show={val} status />;
+                  return (
+                    <DropListShow
+                      key={Math.random()}
+                      idx={idx}
+                      show={val}
+                      status
+                    />
+                  );
                 })}
               </>
             )}
