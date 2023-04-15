@@ -10,6 +10,7 @@ import {
 } from "../../utils/Date";
 
 const CardTime = ({ item, datePicked, onSetPicked, setDateQUery }) => {
+  
   const handlePress = () => {
     const day = caculatorDay(
       moment()
@@ -27,6 +28,7 @@ const CardTime = ({ item, datePicked, onSetPicked, setDateQUery }) => {
         .format(dateFormatQuery)
     );
   };
+  
   return (
     <TouchableOpacity
       style={

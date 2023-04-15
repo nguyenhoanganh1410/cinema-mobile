@@ -20,10 +20,14 @@ const Stack = createStackNavigator();
 
 const screenOptionStyle = {
   headerStyle: {
-    backgroundColor: "#9AC4F8",
+    backgroundColor: "white",
   },
-  headerTintColor: "white",
-  headerBackTitle: "Back",
+  headerTintColor: "black",
+  headerBackTitle: "",
+  headerTitleStyle: {
+    fontWeight: 'bold',
+    color:'black',
+  },
 };
 
 const HomeStackNavigator = () => {
@@ -45,17 +49,17 @@ const HomeStackNavigator = () => {
         component={PickFilmScreen}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+        options={{ title: 'Chọn ghế' }}
         name="PickSeatScreen"
         component={PickSeatComponent}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+       options={{ title: 'Chọn bắp nước' }}
         name="PickProducts"
         component={PickProduct}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+      options={{ title: 'Thanh toán' }}
         name="BookingPreview"
         component={BookingPreview}
       />

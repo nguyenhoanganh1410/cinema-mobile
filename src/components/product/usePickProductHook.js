@@ -7,10 +7,10 @@ import { getProductAndPrice } from "../../service/ProductService";
 import { getShow } from "../../service/ShowService";
 import Contex from "../../store/Context";
 import { caculatorDay, dateFormatQuery, dateVN } from "../../utils/Date";
+import { SetBooking } from "../../store/Actions";
 
 const usePickProductHook = () => {
   const { state, depatch } = useContext(Contex);
-
   const { booking } = state;
   const { seats } = booking;
 
@@ -35,19 +35,18 @@ const usePickProductHook = () => {
 
   useEffect(() => {
     const sumWithInitial = seats.reduce((total, item) => {
-      // console.log(value);
       return item?.price + total;
     }, 0);
 
     const sumProducts = pickProducts.reduce((total, item) => {
-      // console.log(value);
       return item?.price * item?.qty + total;
     }, 0);
-    //console.log(sumWithInitial);
+
     setTotalPrice(sumWithInitial + sumProducts);
   }, [pickProducts]);
 
   const handleContinue = () => {
+    depatch(SetBooking({ ...booking, products: pickProducts }));
     navigation.navigate("BookingPreview");
   };
   return {

@@ -4,7 +4,10 @@ import { StyleSheet, View, Text, SafeAreaView, ScrollView } from "react-native";
 import { GHE_DOI, GHE_THUONG, VND } from "../../constant";
 import CountDownTime from "../../utils/CountDownTime";
 import RadioGroup from "react-native-radio-buttons-group";
+import { MdKeyboardArrowRight } from "react-icons/md";
+import useBookingPreviewHook from "./useBookingPreviewHook";
 const BookingPreview = () => {
+  const { film, handleShowTextSeat, moneyPromotion, totalPrice, seats, products } = useBookingPreviewHook();
   const [radioButtons, setRadioButtons] = useState([
     {
       id: "1", // acts as primary key, should be unique and non-empty string
@@ -15,6 +18,19 @@ const BookingPreview = () => {
   function onPressRadioButton(radioButtonsArray) {
     setRadioButtons(radioButtonsArray);
   }
+
+  const RenderProducts = () => {
+    const data = products.map((val) => {
+      return (
+        <View style={styles.detailTicket} key={Math.random().toString()}>
+          <Text style={{ fontSize: 12 }}>{val?.qty + 'x ' + val?.productName }</Text>
+          <Text style={{ fontWeight: "600", fontSize: 12 }}>{VND.format(val?.qty * val?.price)}</Text>
+        </View>
+      );
+    });
+
+    return data
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.time}>
@@ -30,7 +46,9 @@ const BookingPreview = () => {
           />
           <View style={styles.blockContent}>
             <Text style={[styles.text, { fontWeight: "700" }]}>
-              Chuyen nha toi ...............
+              {film?.nameMovie?.length > 35
+                ? film?.nameMovie?.substring(0, 32) + "..."
+                : film?.nameMovie}
             </Text>
             <Text style={styles.text}>2D Phụ Đề</Text>
             <Text style={styles.text}>Galaxy Nguyễn Du - Rạp 03</Text>
@@ -40,8 +58,8 @@ const BookingPreview = () => {
         <Text
           style={{
             fontSize: 12,
-            marginTop: 28,
-            marginLeft: 24,
+            marginTop: 20,
+            marginLeft: 10,
             marginBottom: 8,
           }}
         >
@@ -49,20 +67,57 @@ const BookingPreview = () => {
         </Text>
         <View style={styles.blockFirst}>
           <View style={styles.detailTicket}>
-            <Text style={{ fontSize: 12 }}>5x Ve 2D D7, D8, D9</Text>
-            <Text style={{ fontWeight: "700" }}>250,000</Text>
+            <Text style={{ fontSize: 12 }}>{handleShowTextSeat().text}</Text>
+            <Text style={{ fontWeight: "600", fontSize: 12 }}>
+              {VND.format(handleShowTextSeat().price)}
+            </Text>
           </View>
 
-          <View style={styles.detailTicket}>
-            <Text style={{ fontSize: 12 }}>5x Ve 2D D7, D8, D9</Text>
-            <Text style={{ fontWeight: "700" }}>250,000</Text>
-          </View>
+        <>
+        <RenderProducts /></>
 
           <View style={[styles.detailTicket, { marginTop: 12 }]}>
-            <Text style={{ fontWeight: "700", fontSize: 16 }}>Tổng cộng</Text>
-            <Text style={{ fontWeight: "700", fontSize: 18, color: "orange" }}>
-              250,000
+            <Text style={{ fontWeight: "600", fontSize: 14 }}>Tổng cộng</Text>
+            <Text style={{ fontWeight: "700", fontSize: 16, color: "orange" }}>
+              {VND.format(totalPrice)}
             </Text>
+          </View>
+          <View style={styles.detailProduct}></View>
+        </View>
+        <View style={[styles.blockFirst, { marginTop: 28 }]}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Image
+                style={styles.image}
+                source={{
+                  uri: "https://en.pimg.jp/071/572/428/1/71572428.jpg",
+                }}
+              />
+              <Text style={{ fontWeight: "500", marginLeft: 6 }}>
+                Khuyến mãi
+              </Text>
+            </View>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <View style={styles.proBlock}>
+                <Text style={styles.proText}>KM01</Text>
+              </View>
+              <View style={styles.proBlock}>
+                <Text style={styles.proText}>KM01</Text>
+              </View>
+
+              <Image
+                style={styles.imageIcon}
+                source={{
+                  uri: "https://cdn.iconscout.com/icon/free/png-256/right-arrow-1438234-1216195.png?f=webp&w=256",
+                }}
+              />
+            </View>
           </View>
 
           <View style={styles.detailProduct}></View>
@@ -72,15 +127,21 @@ const BookingPreview = () => {
           style={{
             fontSize: 12,
             marginTop: 28,
-            marginLeft: 24,
+            marginLeft: 10,
             marginBottom: 8,
           }}
         >
           Thông tin thanh toán
         </Text>
         <View style={styles.blockFirst}>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Image
                 style={styles.image}
                 source={{
@@ -99,6 +160,12 @@ const BookingPreview = () => {
 
           <View style={styles.detailProduct}></View>
         </View>
+        <View style={styles.blockText}>
+          <Text style={{ fontSize: 12 }}>
+            (*) Bằng việc click vào Mua Ngay, bạn xác nhận đã đọc và đồng ý các
+            điều khoản giao dịch trực tuyến của Cinema Hub{" "}
+          </Text>
+        </View>
       </ScrollView>
 
       <View style={styles.bottomSecond}>
@@ -106,7 +173,7 @@ const BookingPreview = () => {
           <Text style={{ marginTop: 6, color: "#DBD0C0" }}>
             Tổng:{" "}
             <Text style={{ color: "orange", fontSize: 18, fontWeight: "600" }}>
-              {VND.format(1800000)}
+              {VND.format(totalPrice - moneyPromotion)}
             </Text>
           </Text>
         </View>
@@ -125,11 +192,16 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     height: 40,
   },
+  imageIcon: {
+    width: 20,
+    borderRadius: 4,
+    height: 20,
+  },
   blockFirst: {
     backgroundColor: "white",
 
     paddingVertical: 10,
-    paddingHorizontal: 28,
+    paddingHorizontal: 10,
   },
   detailTicket: {
     flexDirection: "row",
@@ -144,7 +216,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 100,
     paddingHorizontal: 10,
-    marginHorizontal: 24,
+    marginHorizontal: 10,
     paddingVertical: 10,
   },
   tinyLogo: {
@@ -157,7 +229,6 @@ const styles = StyleSheet.create({
   text: { marginBottom: 4 },
   container: {
     flex: 1,
-    paddingVertical: 20,
     backgroundColor: "#DDDDDD",
   },
   time: {
@@ -183,6 +254,24 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     paddingVertical: 12,
     paddingHorizontal: 24,
+  },
+  blockText: {
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    position: "relative",
+    marginTop: 60,
+  },
+  proBlock: {
+    paddingHorizontal: 16,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: "#569DAA",
+    paddingVertical: 4,
+    marginRight: 4,
+  },
+  proText: {
+    fontSize: 12,
+    color: "#569DAA",
   },
 });
 
