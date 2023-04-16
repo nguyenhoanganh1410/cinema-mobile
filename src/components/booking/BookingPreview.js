@@ -1,13 +1,29 @@
 import React, { useState } from "react";
 import { Button, FlatList, Image, TouchableOpacity } from "react-native";
 import { StyleSheet, View, Text, SafeAreaView, ScrollView } from "react-native";
-import { GHE_DOI, GHE_THUONG, VND } from "../../constant";
+import { GHE_DOI, GHE_THUONG, MESSAGE_PAYMENT_ALERT, VND } from "../../constant";
 import CountDownTime from "../../utils/CountDownTime";
 import RadioGroup from "react-native-radio-buttons-group";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import useBookingPreviewHook from "./useBookingPreviewHook";
+import AlertDialogCustom from "../dialog/AlertDialog";
 const BookingPreview = () => {
-  const { film, handleShowTextSeat, moneyPromotion, totalPrice, seats, products } = useBookingPreviewHook();
+  const {
+    film,
+    show,
+    handleShowTextSeat,
+    isOpen,
+    onClose,
+    setIsOpen,
+    promotion,
+    cinemaHall,
+    handlePayment,
+    moneyPromotion,
+    totalPrice,
+    seats,
+    products,
+    handleCreateOrder
+  } = useBookingPreviewHook();
   const [radioButtons, setRadioButtons] = useState([
     {
       id: "1", // acts as primary key, should be unique and non-empty string
@@ -23,13 +39,17 @@ const BookingPreview = () => {
     const data = products.map((val) => {
       return (
         <View style={styles.detailTicket} key={Math.random().toString()}>
-          <Text style={{ fontSize: 12 }}>{val?.qty + 'x ' + val?.productName }</Text>
-          <Text style={{ fontWeight: "600", fontSize: 12 }}>{VND.format(val?.qty * val?.price)}</Text>
+          <Text style={{ fontSize: 12 }}>
+            {val?.qty + "x " + val?.productName}
+          </Text>
+          <Text style={{ fontWeight: "600", fontSize: 12 }}>
+            {VND.format(val?.qty * val?.price)}
+          </Text>
         </View>
       );
     });
 
-    return data
+    return data;
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -51,8 +71,12 @@ const BookingPreview = () => {
                 : film?.nameMovie}
             </Text>
             <Text style={styles.text}>2D Phụ Đề</Text>
-            <Text style={styles.text}>Galaxy Nguyễn Du - Rạp 03</Text>
-            <Text style={styles.text}>14:45 - Chủ nhật, 09/04/2023</Text>
+            <Text style={styles.text}>
+              {cinemaHall?.Cinema?.name} - {cinemaHall?.name}
+            </Text>
+            <Text style={styles.text}>
+              {show?.ShowTime?.showTime} - {show?.showDate}
+            </Text>
           </View>
         </View>
         <Text
@@ -73,18 +97,26 @@ const BookingPreview = () => {
             </Text>
           </View>
 
-        <>
-        <RenderProducts /></>
+          <>
+            <RenderProducts />
+          </>
+
+          <View style={[styles.detailTicket, { marginTop: 12 }]}>
+            <Text style={{ fontWeight: "600", fontSize: 14 }}>Giảm tiền:</Text>
+            <Text style={{ fontWeight: "700", fontSize: 12 }}>
+              - {VND.format(moneyPromotion)}
+            </Text>
+          </View>
 
           <View style={[styles.detailTicket, { marginTop: 12 }]}>
             <Text style={{ fontWeight: "600", fontSize: 14 }}>Tổng cộng</Text>
             <Text style={{ fontWeight: "700", fontSize: 16, color: "orange" }}>
-              {VND.format(totalPrice)}
+              {VND.format(totalPrice - moneyPromotion)}
             </Text>
           </View>
           <View style={styles.detailProduct}></View>
         </View>
-        <View style={[styles.blockFirst, { marginTop: 28 }]}>
+        <TouchableOpacity style={[styles.blockFirst, { marginTop: 28 }]}>
           <View
             style={{
               flexDirection: "row",
@@ -104,12 +136,17 @@ const BookingPreview = () => {
               </Text>
             </View>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View style={styles.proBlock}>
-                <Text style={styles.proText}>KM01</Text>
-              </View>
-              <View style={styles.proBlock}>
-                <Text style={styles.proText}>KM01</Text>
-              </View>
+              {promotion &&
+                promotion.map((val) => {
+                  return (
+                    <View
+                      key={Math.random().toString()}
+                      style={styles.proBlock}
+                    >
+                      <Text style={styles.proText}>{val?.promotionCode}</Text>
+                    </View>
+                  );
+                })}
 
               <Image
                 style={styles.imageIcon}
@@ -121,7 +158,7 @@ const BookingPreview = () => {
           </View>
 
           <View style={styles.detailProduct}></View>
-        </View>
+        </TouchableOpacity>
 
         <Text
           style={{
@@ -133,7 +170,7 @@ const BookingPreview = () => {
         >
           Thông tin thanh toán
         </Text>
-        <View style={styles.blockFirst}>
+        <TouchableOpacity style={styles.blockFirst}>
           <View
             style={{
               flexDirection: "row",
@@ -159,7 +196,7 @@ const BookingPreview = () => {
           </View>
 
           <View style={styles.detailProduct}></View>
-        </View>
+        </TouchableOpacity>
         <View style={styles.blockText}>
           <Text style={{ fontSize: 12 }}>
             (*) Bằng việc click vào Mua Ngay, bạn xác nhận đã đọc và đồng ý các
@@ -178,11 +215,12 @@ const BookingPreview = () => {
           </Text>
         </View>
         <View style={styles.right}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handlePayment}>
             <Text style={{ color: "white", fontWeight: 600 }}>Thanh toán</Text>
           </TouchableOpacity>
         </View>
       </View>
+      <AlertDialogCustom callBack={handleCreateOrder} isOpen={isOpen} onClose={onClose} content={MESSAGE_PAYMENT_ALERT} />
     </SafeAreaView>
   );
 };

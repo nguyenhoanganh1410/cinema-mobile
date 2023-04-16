@@ -77,7 +77,7 @@ const PickSeatComponent = () => {
               return (
                 <TouchableOpacity
                   style={{ marginBottom: 18 }}
-                  key={Math.random()}
+                  key={Math.random().toString()}
                 >
                   <Text>{val}</Text>
                 </TouchableOpacity>
@@ -151,7 +151,7 @@ const PickSeatComponent = () => {
 
                 return (
                   <View
-                    key={Math.random()}
+                    key={Math.random().toString()}
                     style={{ flexDirection: "row", marginBottom: 19 }}
                   >
                     {dataRow}
@@ -214,7 +214,7 @@ const PickSeatComponent = () => {
               {seatPicked.length > 0 ? (
                 seatPicked.map((val) => {
                   return (
-                    <Text style={{ fontSize: 12 }} key={Math.random()}>
+                    <Text style={{ fontSize: 12 }} key={Math.random().toString()}>
                       {val?.seatColumn + "-" + val?.seatRow + ", "}
                     </Text>
                   );
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#EEEEEE",
     paddingHorizontal: 12,
-    paddingVertical: 48,
+    paddingVertical: 20,
   },
   bottom: { paddingVertical: 0 },
   bottomFirst: {

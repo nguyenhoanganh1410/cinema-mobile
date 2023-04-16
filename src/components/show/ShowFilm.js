@@ -15,6 +15,8 @@ import DropListShow from "../droplist.js/DropListShow";
 import SimpleLottie from "../loading/CatSleeping";
 import NotFound from "../loading/NotFound";
 import useShowFilmHook from "./useShowFilmHook";
+import AlertDialog from "../dialog/AlertDialog";
+import AlertDialogCustom from "../dialog/AlertDialog";
 
 const ShowFilm = () => {
   const {
@@ -30,6 +32,9 @@ const ShowFilm = () => {
     shows,
     loading,
     setLoading,
+    isOpen,
+    setIsOpen,
+    onClose,
   } = useShowFilmHook();
 
   return (
@@ -48,6 +53,7 @@ const ShowFilm = () => {
         <View style={styles.blocksTime}>
           <FlatList
             horizontal
+            keyExtractor={() => Math.random()}
             data={[1, 2, 3, 4, 5, 6, 7]}
             renderItem={({ item }) => (
               <CardTime
@@ -106,6 +112,7 @@ const ShowFilm = () => {
                       idx={idx}
                       show={val}
                       status
+                      setIsOpen={setIsOpen}
                     />
                   );
                 })}
@@ -114,6 +121,7 @@ const ShowFilm = () => {
           </>
         )}
       </ScrollView>
+      <AlertDialogCustom isOpen={isOpen} onClose={onClose}/>
     </SafeAreaView>
   );
 };

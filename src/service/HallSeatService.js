@@ -8,3 +8,14 @@ export const getAllSeatByIdHall = async (id) => {
     throw error;
   }
 };
+
+
+export const getAllHalls = async (id) => {
+  try {
+    const data = await cinemaHallApi.getAllHall();
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+

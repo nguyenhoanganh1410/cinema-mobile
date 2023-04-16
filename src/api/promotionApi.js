@@ -20,6 +20,9 @@ const promotionApi = {
   getPromotionLineByHeader: (_id) => {
     return axiosApi.get(`/promotionLine/promotionHeader/${_id}`);
   },
+  checkPromotion: (data) => {
+    return axiosApi.post(`/promotionHeader/check/promotion`, data);
+  },
 };
 
 export default promotionApi;

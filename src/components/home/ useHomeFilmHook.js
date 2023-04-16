@@ -1,10 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext } from "react";
 import { useEffect } from "react";
-import { TouchableOpacity } from "react-native";
-import { Image } from "react-native";
-import { StyleSheet, View, Text } from "react-native";
-import { FlatGrid } from "react-native-super-grid";
 import movieApi from "../../api/movieApi";
 import { getFilmById } from "../../service/FilmService";
 import { SetBooking } from "../../store/Actions";

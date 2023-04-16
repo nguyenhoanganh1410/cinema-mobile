@@ -12,6 +12,9 @@ const useShowFilmHook = (url) => {
   const { state, depatch } = useContext(Contex);
   const { booking } = state;
 
+  const [isOpen, setIsOpen] = React.useState(false);
+  const onClose = () => setIsOpen(false);
+
   const [datePicked, setPicked] = useState({
     number: 1,
     text: "",
@@ -86,6 +89,9 @@ const useShowFilmHook = (url) => {
   }, [datePicked]);
 
   return {
+    isOpen,
+    setIsOpen,
+    onClose,
     datePicked,
     setPicked,
     open,

@@ -14,10 +14,13 @@ import { colorConst } from "../../utils/Color";
 import { SetBooking } from "../../store/Actions";
 import Contex from "../../store/Context";
 
-const useDropListHook = ({ idx, status, show }) => {
+const useDropListHook = ({ idx, status, show, setIsOpen }) => {
   const { state, depatch } = useContext(Contex);
-  const { booking } = state;
+  const { booking, userLogin } = state;
+
   const navigation = useNavigation();
+
+
   const [showComponent, setShowComponent] = useState({
     idx: 0,
     status: true,
@@ -31,8 +34,13 @@ const useDropListHook = ({ idx, status, show }) => {
   const { dataFilter } = show;
 
   const handleClick = (value) => {
-    navigation.navigate("PickSeatScreen");
-    depatch(SetBooking({ ...booking, show: value }));
+    if(userLogin){
+      navigation.navigate("PickSeatScreen");
+      depatch(SetBooking({ ...booking, show: value }));
+
+    }else{
+      setIsOpen(true)
+    }
   };
 
   return {

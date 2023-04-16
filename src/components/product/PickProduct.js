@@ -48,6 +48,7 @@ const PickProduct = () => {
           <FlatList
             horizontal
             data={pickProducts}
+            keyExtractor={() => Math.random()}
             renderItem={({ item }) => (
               <ItemProduct
                 setPickProducts={setPickProducts}

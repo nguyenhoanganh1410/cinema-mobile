@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { getAllSeatByIdHall } from "../../service/HallSeatService";
-import { getReservationData } from "../../service/ReservationFetch";
+import { createReservationData, getReservationData } from "../../service/ReservationFetch";
 import { getPrice } from "../../service/PriceService";
 
 import Contex from "../../store/Context";
@@ -61,7 +61,19 @@ const usePickSeatHook = (url) => {
     }
 
     depatch(SetBooking({ ...booking, seats: seatPicked }));
-    navigation.navigate("PickProducts");
+    const listSeatId = seatPicked.map(seat=>{
+      return seat?.id
+    })
+    const dataPayload = {
+      showTime_id: show?.id,
+      staff_id: 5,
+      seats: [...listSeatId]
+    }
+    createReservationData(dataPayload).then( ()=>{
+      navigation.navigate("PickProducts");
+    }).catch(()=>{
+      alert('Lỗi hệ thống - lỗi giữ chỗ')
+    })
   };
 
   useEffect(() => {

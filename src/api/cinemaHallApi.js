@@ -16,6 +16,9 @@ const cinemaHallApi = {
   updateSeat: (id, data) => {
     return axiosApi.put(`/cinemaHallSeat/${id}`, data);
   },
-};
+  getAllHall: () => {
+    return axiosApi.get(`/cinemaHall`);
+  },
+}
 
 export default cinemaHallApi;

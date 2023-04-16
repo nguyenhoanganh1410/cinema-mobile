@@ -28,6 +28,7 @@ axiosApi.interceptors.request.use(async (config) => {
 
 axiosApi.interceptors.response.use(
   (response) => {
+
     if (response && response.data) {
       return response.data;
     }

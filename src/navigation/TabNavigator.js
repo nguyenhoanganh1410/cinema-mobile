@@ -18,7 +18,6 @@ const TabNavigator = () => {
   const handleGetUSer = async () =>{
     const user = await AsyncStorage.getItem('user');
     if(user){
-  
       depatch(SetUserLogin(JSON.parse(user)))
     }
   }

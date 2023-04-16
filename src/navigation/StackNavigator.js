@@ -39,12 +39,12 @@ const HomeStackNavigator = () => {
         component={HomePage}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+        options={{ title: 'Chọn suất chiếu' }}
         name="FilmDetail"
         component={TopBarNavigation}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+        options={{ title: 'Chọn ghế' }}
         name="PickFilm"
         component={PickFilmScreen}
       />
