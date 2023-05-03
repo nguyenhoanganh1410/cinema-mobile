@@ -15,6 +15,7 @@ import TopBarNavigation from "./TopBarNavigation";
 import PickSeatComponent from "../components/seat/PickSeatComponent";
 import PickProduct from "../components/product/PickProduct";
 import BookingPreview from "../components/booking/BookingPreview";
+import ForgotPassword from "../pages/ForgotPassword";
 
 const Stack = createStackNavigator();
 
@@ -114,6 +115,11 @@ const LoginStackNavigator = () => {
         options={{ headerShown: false }}
         name="SignUp"
         component={Register}
+      />
+       <Stack.Screen
+        options={{ headerShown: false }}
+        name="Forgot"
+        component={ForgotPassword}
       />
     </Stack.Navigator>
   );

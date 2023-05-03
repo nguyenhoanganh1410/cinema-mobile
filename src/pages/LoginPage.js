@@ -15,6 +15,7 @@ import { Formik } from "formik";
 import userApi from "../api/userApi";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import SimpleLottie from "../components/loading/CatSleeping";
 
 const imageUrl = "https://images.unsplash.com/photo-1526045612212-70caf35c14df";
 
@@ -23,31 +24,26 @@ export default function Login({ navigation }) {
   const { userLogin } = state;
 
   const handleLogin = async (values) => {
-    const {email, password} = values
-    if(!email || !password){
-      alert("Chưa nhập tài khoản hoặc mật khẩu!")
+    const { email, password } = values;
+    if (!email || !password) {
+      alert("Chưa nhập tài khoản hoặc mật khẩu!");
       return;
     }
-    await userApi.login(email, password).then((user) =>{
-      navigation.navigate("Home")
-      depatch(SetUserLogin(user.data))
-      AsyncStorage.setItem('user',JSON.stringify(user.data));  
-    }).catch((erro) => alert("Tài khoản hoặc mật khẩu sai!!"))
-   
+    await userApi
+      .login(email, password)
+      .then((user) => {
+        navigation.navigate("Home");
+        depatch(SetUserLogin(user.data));
+        AsyncStorage.setItem("user", JSON.stringify(user.data));
+      })
+      .catch((erro) => alert("Tài khoản hoặc mật khẩu sai!!"));
   };
 
   return (
     <View style={styles.AndroidSafeArea}>
       <View style={styles.container}>
         <View style={styles.topView}>
-        <Image source={{uri: imageUrl}} />
-          <Image
-            source={{
-              uri: "https://static.wikia.nocookie.net/logos/images/8/8c/BHD_Cinema.png/revision/latest?cb=20210914235144&path-prefix=vi"
-            }}
-            resizeMode="center"
-            //style={styles.image}
-          />
+          <SimpleLottie />
         </View>
 
         <View style={styles.downView}>
@@ -64,10 +60,10 @@ export default function Login({ navigation }) {
               <Text
                 style={{
                   fontSize: 26,
-                  
+
                   marginBottom: 10,
                   textAlign: "center",
-                  fontWeight:"700",
+                  fontWeight: "700",
                   //color:"#6ECB63"
                 }}
               >
@@ -75,7 +71,7 @@ export default function Login({ navigation }) {
               </Text>
             </View>
             <Formik
-              initialValues={{ email: "0943220476", password: "dang123" }}
+              initialValues={{ email: "0397530256", password: "dang123" }}
               onSubmit={(values) => handleLogin(values)}
             >
               {({ handleChange, handleBlur, handleSubmit, values }) => (
@@ -96,12 +92,13 @@ export default function Login({ navigation }) {
                       placeholder="password"
                       value={values.password}
                       onChangeText={handleChange("password")}
-                      
                     />
                   </View>
                   <View>
                     <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-                      <Text style={{ color: "white", fontSize:18 }}>Login</Text>
+                      <Text style={{ color: "white", fontSize: 18 }}>
+                        Đăng nhập
+                      </Text>
                     </TouchableOpacity>
                   </View>
                 </>
@@ -109,17 +106,17 @@ export default function Login({ navigation }) {
             </Formik>
 
             <View style={styles.recoverPassword}>
-              <Text style={{ color: "black" }}>Do you have account?</Text>
+              <Text style={{ color: "black" }}>Bạn chưa có tài khoản?</Text>
               <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
                 <Text style={{ color: "#519259", marginLeft: 10 }}>
-                  Register
+                  Đăng ký
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
 
-          <Text style={{ color: "#333", marginLeft: 10 }}>
-              Share your opinion about the design?
+          <Text style={{ color: "#333", marginLeft: 10, color: "green" }}  onPress={() => navigation.navigate("Forgot")}>
+            Quên mật khẩu
           </Text>
         </View>
       </View>
@@ -133,22 +130,21 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    
   },
   topView: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-   // backgroundColor:"red"
+    // backgroundColor:"red"
   },
   downView: {
     flex: 1.5,
 
     alignItems: "center",
-    display:"flex",
-    flexDirection:"column",
-    justifyContent:"space-between",
-    paddingBottom:16
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    paddingBottom: 16,
   },
 
   input: {
@@ -158,12 +154,12 @@ const styles = StyleSheet.create({
   viewInput: {
     height: 50,
     marginBottom: 20,
-   // backgroundColor: "black",
+    // backgroundColor: "black",
     //borderColor: "white",
     borderWidth: 1,
     justifyContent: "center",
     borderRadius: 5,
-   // color: "white",
+    // color: "white",
   },
 
   btn: {

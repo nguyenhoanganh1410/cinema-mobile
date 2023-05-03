@@ -9,27 +9,43 @@ import {
   Alert,
 } from "react-native";
 import React, { useContext, useState } from "react";
-import Button from "@ant-design/react-native/lib/button";
-
 import Contex from "../store/Context";
 import { SetUserLogin } from "../store/Actions";
 import { Formik } from "formik";
+import userApi from "../api/userApi";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import SimpleLottie from "../components/loading/CatSleeping";
+
 const imageUrl = "https://images.unsplash.com/photo-1526045612212-70caf35c14df";
-export default function SignUp({ navigation }) {
+
+export default function ForgotPassword({ navigation }) {
   const { state, depatch } = useContext(Contex);
   const { userLogin } = state;
 
-  const handleLogin = () => {
-    //navigation.navigate("Home");
+  const handleLogin = async (values) => {
+    const { email, password } = values;
+    if (!email || !password) {
+      alert("Chưa nhập tài khoản hoặc mật khẩu!");
+      return;
+    }
+    await userApi
+      .login(email, password)
+      .then((user) => {
+        navigation.navigate("Home");
+        depatch(SetUserLogin(user.data));
+        AsyncStorage.setItem("user", JSON.stringify(user.data));
+      })
+      .catch((erro) => alert("Tài khoản hoặc mật khẩu sai!!"));
   };
 
   return (
     <View style={styles.AndroidSafeArea}>
-      <View style={styles.container}>   
-      <View style={styles.blockTop}>
-      <SimpleLottie />
-      </View>
+      <View style={styles.container}>
+        <View style={styles.topView}>
+          <SimpleLottie />
+        </View>
+
         <View style={styles.downView}>
           <View style={styles.input}>
             <View
@@ -44,42 +60,32 @@ export default function SignUp({ navigation }) {
               <Text
                 style={{
                   fontSize: 26,
-                  
+
                   marginBottom: 10,
                   textAlign: "center",
-                  fontWeight:"700",
+                  fontWeight: "700",
                   //color:"#6ECB63"
                 }}
               >
                 Cinema Hub
               </Text>
+              <Text
+                style={{
+                  fontSize: 14,
+                  marginBottom: 10,
+                  textAlign: "center",
+                  fontWeight: "400",
+                  //color:"#6ECB63"
+                }}
+              >
+                Nhập email để nhận mật khẩu mới.
+              </Text>
             </View>
             <Formik
-              initialValues={{ email: "", password: "" }}
-              onSubmit={(values) => console.log(values)}
-            >
+             initialValues={{ email: "" }}
+            onSubmit={(values) => handleLogin(values)}>
               {({ handleChange, handleBlur, handleSubmit, values }) => (
                 <>
-                  <View style={styles.viewInput}>
-                    <TextInput
-                      onChangeText={handleChange("email")}
-                      onBlur={handleBlur("email")}
-                      value={values.email}
-                      placeholder="Name"
-                      style={{ paddingLeft: 10, color: "#333" }}
-                    />
-                  </View>
-
-                  <View style={styles.viewInput}>
-                    <TextInput
-                      onChangeText={handleChange("email")}
-                      onBlur={handleBlur("email")}
-                      value={values.email}
-                      placeholder="Số điện thoại"
-                      style={{ paddingLeft: 10, color: "#333" }}
-                    />
-                  </View>
-
                   <View style={styles.viewInput}>
                     <TextInput
                       onChangeText={handleChange("email")}
@@ -90,27 +96,9 @@ export default function SignUp({ navigation }) {
                     />
                   </View>
 
-                  <View style={styles.viewInput}>
-                    <TextInput
-                      style={{ paddingLeft: 10, color: "#333" }}
-                      placeholder="password"
-                      value={values.password}
-                      onChangeText={handleChange("password")}
-                      secure={true}
-                    />
-                  </View>
-                  <View style={styles.viewInput}>
-                    <TextInput
-                      style={{ paddingLeft: 10, color: "#333" }}
-                      placeholder="password"
-                      value={values.password}
-                      onChangeText={handleChange("password")}
-                      
-                    />
-                  </View>
                   <View>
                     <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-                      <Text style={{ color: "white", fontSize:18 }}>Đăng ký</Text>
+                      <Text style={{ color: "white", fontSize: 18 }}>Gửi</Text>
                     </TouchableOpacity>
                   </View>
                 </>
@@ -118,7 +106,7 @@ export default function SignUp({ navigation }) {
             </Formik>
 
             <View style={styles.recoverPassword}>
-              <Text style={{ color: "black" }}>Bạn đã có tài khoản?</Text>
+              <Text style={{ color: "black" }}>Bạn có tài khoản?</Text>
               <TouchableOpacity onPress={() => navigation.navigate("Login")}>
                 <Text style={{ color: "#519259", marginLeft: 10 }}>
                   Đăng nhập
@@ -126,8 +114,6 @@ export default function SignUp({ navigation }) {
               </TouchableOpacity>
             </View>
           </View>
-
-         
         </View>
       </View>
     </View>
@@ -140,23 +126,21 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    display:"flex",
-    justifyContent:"center",
-    alignItems:"center"
   },
-  blockTop: {
-    flex:1,
+  topView: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    // backgroundColor:"red"
   },
   downView: {
-    flex:3,
-    //backgroundColor:'red',
+    flex: 1.5,
+
     alignItems: "center",
-    display:"flex",
-    flexDirection:"column",
-    justifyContent:"space-between",
-    paddingBottom:16,
-    width:"100%",
-    height:"100%"
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    paddingBottom: 16,
   },
 
   input: {
@@ -166,12 +150,12 @@ const styles = StyleSheet.create({
   viewInput: {
     height: 50,
     marginBottom: 20,
-   // backgroundColor: "black",
+    // backgroundColor: "black",
     //borderColor: "white",
     borderWidth: 1,
     justifyContent: "center",
     borderRadius: 5,
-   // color: "white",
+    // color: "white",
   },
 
   btn: {
