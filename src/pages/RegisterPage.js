@@ -16,12 +16,40 @@ import { SetUserLogin } from "../store/Actions";
 import { Formik } from "formik";
 import SimpleLottie from "../components/loading/CatSleeping";
 const imageUrl = "https://images.unsplash.com/photo-1526045612212-70caf35c14df";
-export default function SignUp({ navigation }) {
+import {SignUpUser} from "../service/userService"
+import { useNavigation } from "@react-navigation/native";
+export default function SignUp() {
   const { state, depatch } = useContext(Contex);
-  const { userLogin } = state;
+  const navigation = useNavigation();
 
-  const handleLogin = () => {
-    //navigation.navigate("Home");
+  const handleLoginFormSubmit = (values) => {
+    var phoneno = /^\d{10}$/;
+    var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const {name, email, password, confirmPassword, phone} = values
+    if(name.length === 0 || email.length === 0 || password.length === 0 || confirmPassword.length === 0 || phone.length === 0) {
+      alert("Yêu cầu nhập đủ thông tin.")
+      return
+    } else if(!phone.match(phoneno)){
+      alert("Số điện thoại không đúng định dạng.")
+      return
+    }  else if(!email.match(validRegex)){
+      alert("Email không đúng định dạng.")
+      return
+    } else if(password !== confirmPassword){
+      alert("Mật khẩu phải giổng nhau.")
+      return
+    }
+
+    const data = {
+      ...values, firstName: values.name, lastName: ""
+    }
+
+    SignUpUser(data).then((data) => {
+      navigation.navigate("SignUpSuccessPage")
+    }).catch(error => {
+      console.log(error.message);
+      alert("Email hoặc Số ĐT đã tồn tại.")
+    })
   };
 
   return (
@@ -55,16 +83,16 @@ export default function SignUp({ navigation }) {
               </Text>
             </View>
             <Formik
-              initialValues={{ email: "", password: "" }}
-              onSubmit={(values) => console.log(values)}
+              initialValues={{ email: "", name:"", phone:"", password: "", confirmPassword:"" }}
+              onSubmit={handleLoginFormSubmit}
             >
               {({ handleChange, handleBlur, handleSubmit, values }) => (
                 <>
                   <View style={styles.viewInput}>
                     <TextInput
-                      onChangeText={handleChange("email")}
-                      onBlur={handleBlur("email")}
-                      value={values.email}
+                      onChangeText={handleChange("name")}
+                      onBlur={handleBlur("name")}
+                      value={values.name}
                       placeholder="Name"
                       style={{ paddingLeft: 10, color: "#333" }}
                     />
@@ -72,9 +100,9 @@ export default function SignUp({ navigation }) {
 
                   <View style={styles.viewInput}>
                     <TextInput
-                      onChangeText={handleChange("email")}
-                      onBlur={handleBlur("email")}
-                      value={values.email}
+                      onChangeText={handleChange("phone")}
+                      onBlur={handleBlur("phone")}
+                      value={values.phone}
                       placeholder="Số điện thoại"
                       style={{ paddingLeft: 10, color: "#333" }}
                     />
@@ -91,22 +119,33 @@ export default function SignUp({ navigation }) {
                   </View>
 
                   <View style={styles.viewInput}>
-                    <TextInput
+                      <TextInput
                       style={{ paddingLeft: 10, color: "#333" }}
                       placeholder="password"
                       value={values.password}
                       onChangeText={handleChange("password")}
                       secure={true}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      textContentType="newPassword"
+                      secureTextEntry
+                      enablesReturnKeyAutomatically
                     />
                   </View>
                   <View style={styles.viewInput}>
                     <TextInput
                       style={{ paddingLeft: 10, color: "#333" }}
-                      placeholder="password"
-                      value={values.password}
-                      onChangeText={handleChange("password")}
-                      
+                      placeholder="Confirm password"
+                      value={values.confirmPassword}
+                      onChangeText={handleChange("confirmPassword")}
+                      secure={true}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      textContentType="newPassword"
+                      secureTextEntry
+                      enablesReturnKeyAutomatically
                     />
+                    
                   </View>
                   <View>
                     <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
@@ -148,7 +187,7 @@ const styles = StyleSheet.create({
     flex:1,
   },
   downView: {
-    flex:3,
+    flex:4,
     //backgroundColor:'red',
     alignItems: "center",
     display:"flex",

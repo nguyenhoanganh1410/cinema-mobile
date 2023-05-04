@@ -21,6 +21,7 @@ const usePickSeatHook = (url) => {
   const [totalPrice, setTotalPrice] = useState(0);
 
   const handlePress = (seat) => {
+
     if (seat.statusSeat || !seat.status) {
       return;
     }

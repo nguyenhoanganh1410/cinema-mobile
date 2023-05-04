@@ -16,6 +16,9 @@ import PickSeatComponent from "../components/seat/PickSeatComponent";
 import PickProduct from "../components/product/PickProduct";
 import BookingPreview from "../components/booking/BookingPreview";
 import ForgotPassword from "../pages/ForgotPassword";
+import ProfileScreen from "../pages/ProfileScreen";
+import SignUpSuccessPage from "../pages/SignUpSuccessPage";
+import UpdateProfilePage from "../pages/UpdateProfilePage";
 
 const Stack = createStackNavigator();
 
@@ -98,7 +101,12 @@ const ProfileStackNavigator = () => {
       <Stack.Screen
         options={{ headerShown: false }}
         name="Profile"
-        component={ProfilePage}
+        component={ProfileScreen}
+      />
+       <Stack.Screen
+       // options={{ headerShown: false }}
+        name="UpdateProfile"
+        component={UpdateProfilePage}
       />
     </Stack.Navigator>
   );
@@ -115,6 +123,11 @@ const LoginStackNavigator = () => {
         options={{ headerShown: false }}
         name="SignUp"
         component={Register}
+      />
+       <Stack.Screen
+        options={{ headerShown: false }}
+        name="SignUpSuccessPage"
+        component={SignUpSuccessPage}
       />
        <Stack.Screen
         options={{ headerShown: false }}

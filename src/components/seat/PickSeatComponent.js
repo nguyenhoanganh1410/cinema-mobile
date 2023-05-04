@@ -71,96 +71,101 @@ const PickSeatComponent = () => {
             Màn hình{" "}
           </Text>
         </View>
-        <View style={styles.seatsMap}>
-          <View style={{ marginRight: 24 }}>
-            {arrColumn.map((val) => {
-              return (
-                <TouchableOpacity
-                  style={{ marginBottom: 18 }}
-                  key={Math.random().toString()}
-                >
-                  <Text>{val}</Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-          <View>
-            <View>
+        <ScrollView>
+          <View style={styles.seatsMap}>
+            <View style={{ marginRight: 24 }}>
               {arrColumn.map((val) => {
-                const newArr = seats.filter((seat) => {
-                  if (seat.seatColumn === val) {
-                    return seat;
-                  }
-                });
-
-                const dataRow = newArr.map((item) => {
-                  const index = seatPicked.findIndex((element) => {
-                    if (element.id === item?.id) {
-                      return true;
-                    }
-                    return false;
-                  });
-                  if (index != -1) {
-                    return (
-                      <SeatComponent
-                        item={item}
-                        handlePress={handlePress}
-                        bgColor="orange"
-                        color=""
-                      />
-                    );
-                  }
-                  if (!item?.status) {
-                    return (
-                      <SeatComponent
-                        item={item}
-                        handlePress={handlePress}
-                        bgColor="gray"
-                        color="black"
-                      />
-                    );
-                  } else if (item?.statusSeat) {
-                    return (
-                      <SeatComponent
-                        item={item}
-                        handlePress={handlePress}
-                        bgColor="red"
-                        color="black"
-                      />
-                    );
-                  } else if (item?.Product?.typeSeat === 3) {
-                    return (
-                      <SeatComponent
-                        item={item}
-                        handlePress={handlePress}
-                        bgColor="white"
-                        color="black"
-                      />
-                    );
-                  } else {
-                    return (
-                      <SeatComponent
-                        item={item}
-                        handlePress={handlePress}
-                        bgColor="white"
-                        color="#96CD39"
-                      />
-                    );
-                  }
-                });
-
                 return (
-                  <View
+                  <TouchableOpacity
+                    style={{ marginBottom: 18 }}
                     key={Math.random().toString()}
-                    style={{ flexDirection: "row", marginBottom: 19 }}
                   >
-                    {dataRow}
-                  </View>
+                    <Text>{val}</Text>
+                  </TouchableOpacity>
                 );
               })}
             </View>
+            <View>
+              <View>
+                {arrColumn.map((val) => {
+                  const newArr = seats.filter((seat) => {
+                    if (seat.seatColumn === val) {
+                      return seat;
+                    }
+                  });
+
+                  const dataRow = newArr.map((item) => {
+                    const index = seatPicked.findIndex((element) => {
+                      if (element.id === item?.id) {
+                        return true;
+                      }
+                      return false;
+                    });
+
+                    console.log(item);
+                    if (index != -1) {
+                      return (
+                        <SeatComponent
+                          item={item}
+                          handlePress={handlePress}
+                          bgColor="orange"
+                          color=""
+                          text={item?.seatColumn + item?.seatRow}
+                        />
+                      );
+                    }
+                    if (!item?.status) {
+                      return (
+                        <SeatComponent
+                          item={item}
+                          handlePress={handlePress}
+                          bgColor="gray"
+                          color="black"
+                        />
+                      );
+                    } else if (item?.statusSeat) {
+                      return (
+                        <SeatComponent
+                          item={item}
+                          handlePress={handlePress}
+                          bgColor="red"
+                          color="black"
+                        />
+                      );
+                    } else if (item?.Product?.typeSeat === 3) {
+                      return (
+                        <SeatComponent
+                          item={item}
+                          handlePress={handlePress}
+                          bgColor="white"
+                          color="black"
+                        />
+                      );
+                    } else {
+                      return (
+                        <SeatComponent
+                          item={item}
+                          handlePress={handlePress}
+                          bgColor="white"
+                          color="#96CD39"
+                        />
+                      );
+                    }
+                  });
+
+                  return (
+                    <View
+                      key={Math.random().toString()}
+                      style={{ flexDirection: "row", marginBottom: 19 }}
+                    >
+                      {dataRow}
+                    </View>
+                  );
+                })}
+              </View>
+            </View>
           </View>
-        </View>
+        </ScrollView>
       </View>
       <View style={styles.bottom}>
         <View style={styles.bottomFirst}>
@@ -214,7 +219,10 @@ const PickSeatComponent = () => {
               {seatPicked.length > 0 ? (
                 seatPicked.map((val) => {
                   return (
-                    <Text style={{ fontSize: 12 }} key={Math.random().toString()}>
+                    <Text
+                      style={{ fontSize: 12 }}
+                      key={Math.random().toString()}
+                    >
                       {val?.seatColumn + "-" + val?.seatRow + ", "}
                     </Text>
                   );

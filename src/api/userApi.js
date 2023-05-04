@@ -7,6 +7,10 @@ const userApi = {
       password,
     });
   },
+
+  signup: (data) => {
+    return axiosApi.post("/auth/signup", data )
+  },
 };
 
 export default userApi;

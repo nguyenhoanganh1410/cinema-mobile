@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Button, StyleSheet, TouchableOpacity } from "react-native";
+import { Button, StyleSheet, TouchableOpacity, Text } from "react-native";
 
-const SeatComponent = ({ item, handlePress, bgColor, color }) => {
+const SeatComponent = ({ item, handlePress, bgColor, color, text }) => {
   return (
     <TouchableOpacity
       key={Math.random()}
@@ -15,7 +15,12 @@ const SeatComponent = ({ item, handlePress, bgColor, color }) => {
           marginRight: 20,
         },
       ]}
-    ></TouchableOpacity>
+    >
+      {
+        text?.length > 0 ? 
+        <Text style={{fontSize:8, textAlign:"center", color:"white", fontWeight:"700", marginTop:4}}>{text}</Text> : null
+      }
+    </TouchableOpacity>
   );
 };
 const styles = StyleSheet.create({

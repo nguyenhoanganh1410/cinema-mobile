@@ -19,28 +19,10 @@ import SimpleLottie from "../components/loading/CatSleeping";
 
 const imageUrl = "https://images.unsplash.com/photo-1526045612212-70caf35c14df";
 
-export default function Login({ navigation }) {
+export default function SignUpSuccessPage({ navigation: { goBack } }) {
   const { state, depatch } = useContext(Contex);
   const { userLogin } = state;
-
-  const handleLogin = async (values) => {
-    const { email, password } = values;
-    if (!email || !password) {
-      alert("Chưa nhập tài khoản hoặc mật khẩu!");
-      return;
-    }
-    await userApi
-      .login(email, password)
-      .then((user) => {
-        navigation.navigate("Home");
-        depatch(SetUserLogin(user.data));
-        AsyncStorage.setItem("user", JSON.stringify(user.data));
-      })
-      .catch((erro) => {
-        alert(erro.response.data.message);
-       // alert("Tài khoản hoặc mật khẩu sai!!")
-      });
-  };
+  //const navigation = useNavigation()
 
   return (
     <View style={styles.AndroidSafeArea}>
@@ -72,55 +54,31 @@ export default function Login({ navigation }) {
               >
                 Cinema Hub
               </Text>
+              <Text
+                style={{
+                  fontSize: 14,
+
+                  marginBottom: 20,
+                  marginTop: 20,
+                  textAlign: "center",
+                  fontWeight: "400",
+                  //color:"#6ECB63"
+                }}
+              >
+                Bạn đã đăng ký tài khoản thành công. Vui lòng check mail để mở
+                tài khoản.
+              </Text>
             </View>
-            <Formik
-              initialValues={{ email: "0397530256", password: "dang123" }}
-              onSubmit={(values) => handleLogin(values)}
-            >
-              {({ handleChange, handleBlur, handleSubmit, values }) => (
-                <>
-                  <View style={styles.viewInput}>
-                    <TextInput
-                      onChangeText={handleChange("email")}
-                      onBlur={handleBlur("email")}
-                      value={values.email}
-                      placeholder="Email"
-                      style={{ paddingLeft: 10, color: "#333" }}
-                    />
-                  </View>
 
-                  <View style={styles.viewInput}>
-                    <TextInput
-                      style={{ paddingLeft: 10, color: "#333" }}
-                      placeholder="password"
-                      value={values.password}
-                      onChangeText={handleChange("password")}
-                    />
-                  </View>
-                  <View>
-                    <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-                      <Text style={{ color: "white", fontSize: 18 }}>
-                        Đăng nhập
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </>
-              )}
-            </Formik>
-
-            <View style={styles.recoverPassword}>
-              <Text style={{ color: "black" }}>Bạn chưa có tài khoản?</Text>
-              <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-                <Text style={{ color: "#519259", marginLeft: 10 }}>
-                  Đăng ký
-                </Text>
+            <View>
+              <TouchableOpacity
+                style={styles.btn}
+                onPress={() => goBack("Login")}
+              >
+                <Text style={{ color: "white", fontSize: 18 }}>Đăng ký tiếp</Text>
               </TouchableOpacity>
             </View>
           </View>
-
-          <Text style={{ color: "#333", marginLeft: 10, color: "green" }}  onPress={() => navigation.navigate("Forgot")}>
-            Quên mật khẩu
-          </Text>
         </View>
       </View>
     </View>
