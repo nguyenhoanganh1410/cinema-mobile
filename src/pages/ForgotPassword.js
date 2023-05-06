@@ -24,19 +24,12 @@ export default function ForgotPassword({ navigation }) {
   const { userLogin } = state;
 
   const handleLogin = async (values) => {
-    const { email, password } = values;
-    if (!email || !password) {
-      alert("Chưa nhập tài khoản hoặc mật khẩu!");
+    const { email } = values;
+    if (!email) {
+      alert("Chưa nhập email!");
       return;
     }
-    await userApi
-      .login(email, password)
-      .then((user) => {
-        navigation.navigate("Home");
-        depatch(SetUserLogin(user.data));
-        AsyncStorage.setItem("user", JSON.stringify(user.data));
-      })
-      .catch((erro) => alert("Tài khoản hoặc mật khẩu sai!!"));
+   
   };
 
   return (

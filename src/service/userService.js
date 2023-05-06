@@ -20,3 +20,30 @@ export const getMemberShipById = async (id) => {
     throw error;
   }
 };
+
+export const updateInfoCustomer = async (id, dataPayload) => {
+  try {
+    const data = await userApi.updateCustomer(id, dataPayload)
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updatePasswordCustomer = async (id, dataPayload) => {
+  try {
+    const data = await userApi.updatePassword(id, dataPayload)
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getCustomerById = async (id) => {
+  try {
+    const data = await userApi.getCustomer(id)
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

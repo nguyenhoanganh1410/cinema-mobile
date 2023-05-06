@@ -12,6 +12,7 @@ import React, { useContext, useState } from "react";
 import Contex from "../store/Context";
 import { Formik } from "formik";
 import SimpleLottie from "../components/loading/CatSleeping";
+import { updatePasswordCustomer } from "../service/userService";
 
 export default function ResetPassword({ navigation }) {
   const { state, depatch } = useContext(Contex);
@@ -27,10 +28,16 @@ export default function ResetPassword({ navigation }) {
       return;
     }
 
-    navigation.navigate("SignUpSuccessPage", {
+    updatePasswordCustomer(userLogin?.customer?.id, {password}).then((data) => {
+      navigation.navigate("SignUpSuccessPage", {
         content: "Bạn đã đổi mật khẩu thành công.",
-        button: "Về trang chủ"
-    })
+        button: "Về trang chủ",
+      });
+
+    }).catch(error => {
+      alert("Lỗi đổi mật khẩu. Hãy thử lại sau.")
+    }) 
+
   };
 
   return (
@@ -96,17 +103,16 @@ export default function ResetPassword({ navigation }) {
                       enablesReturnKeyAutomatically
                     />
                   </View>
-
                   <View style={styles.viewInput}>
                     <TextInput
                       style={{ paddingLeft: 10, color: "#333" }}
-                      placeholder="Confirm Password"
+                      placeholder="Confirm password"
                       value={values.confirmPassword}
                       onChangeText={handleChange("confirmPassword")}
                       secure={true}
                       autoCapitalize="none"
                       autoCorrect={false}
-                      textContentType="confirmPassword"
+                      textContentType="newPassword"
                       secureTextEntry
                       enablesReturnKeyAutomatically
                     />

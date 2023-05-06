@@ -16,15 +16,38 @@ import userApi from "../api/userApi";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import SimpleLottie from "../components/loading/CatSleeping";
+import { getCustomerById, updateInfoCustomer } from "../service/userService";
 
 const imageUrl = "https://images.unsplash.com/photo-1526045612212-70caf35c14df";
 
-export default function UpdateProfilePage({ navigation: {goBack} }) {
+export default function UpdateProfilePage({ navigation: { goBack } }) {
   const { state, depatch } = useContext(Contex);
   const { userLogin } = state;
-  const navigation = useNavigation()
-  const handleUpdate = () => {
-    goBack()
+  const navigation = useNavigation();
+  const handleUpdate = (values) => {
+    const { name } = values;
+    if (name.length === 0) {
+      alert("Không được để trống.");
+      return;
+    }
+    console.log(name);
+    updateInfoCustomer(userLogin?.customer?.id, { firstName: name })
+      .then((data) => {
+        console.log(data);
+        getCustomerById(userLogin?.customer?.id).then((data) => {
+          const dataFormat = {customer: data}
+          console.log(dataFormat);
+          depatch(SetUserLogin(dataFormat));
+          AsyncStorage.setItem("user", JSON.stringify(dataFormat));
+        })
+        .catch(erro => {
+          console.log(erro);
+        })
+        goBack();
+      })
+      .catch((erro) => {
+        alert("Lỗi hệ thống.");
+      });
   };
 
   return (
@@ -125,7 +148,10 @@ export default function UpdateProfilePage({ navigation: {goBack} }) {
               )}
             </Formik>
 
-            <TouchableOpacity style={styles.recoverPassword} onPress={() => navigation.navigate("ResetPassword")}>
+            <TouchableOpacity
+              style={styles.recoverPassword}
+              onPress={() => navigation.navigate("ResetPassword")}
+            >
               <Text style={{ color: "black" }}>Đổi mật khẩu ?</Text>
             </TouchableOpacity>
           </View>
