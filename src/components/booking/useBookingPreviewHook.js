@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import Contex from "../../store/Context";
-import { SetBooking } from "../../store/Actions";
+import { SetBooking, SetPromotion, SetPromotionNotActive, SetPromotionWillActive } from "../../store/Actions";
 import { useContext, useEffect } from "react";
 import { checkPromotionCinema } from "../../service/PromotionService";
 import { getAllHalls } from "../../service/HallSeatService";
@@ -12,24 +12,35 @@ import { Linking } from "react-native";
 
 const useBookingPreviewHook = () => {
   const { state, depatch } = useContext(Contex);
-  const { booking, userLogin } = state;
+  const { booking, userLogin, promotion, promotionWillActive } = state;
   const { seats, film, products, show } = booking;
 
+  console.log("anhanh", promotionWillActive);
   const navigation = useNavigation();
 
   const [quality, setQuality] = useState(0);
 
   const [totalPriceTmp, setTotalPriceTmp] = useState(0);
 
-  const [moneyPromotion, setMoneyPromotion] = useState(0)
+  const [moneyPromotion, setMoneyPromotion] = useState(0);
 
-  const [promotion, setPromotion] = useState([])
+  //const [promotion, setPromotion] = useState([])
 
   const [cinemaHall, setCinemaHall] = useState(null);
 
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
 
+  const [selectedId, setSelectedId] = useState(false);
+
+  const [loaddingGetPromotion, setLoaddingGetPromotion] = useState(true)
+
+  useEffect(() => {
+    depatch(SetPromotionWillActive([]))
+    depatch(SetPromotionNotActive([]))
+  }, [])
+
+  // console.log(promotion);
   useEffect(() => {
     const sumWithInitial = seats.reduce((total, item) => {
       return item?.price + total;
@@ -47,20 +58,20 @@ const useBookingPreviewHook = () => {
     navigation.navigate("BookingPreview");
   };
 
-  const handleShowTextSeat = () =>{
-    const string = seats.map(val =>{
-        return val?.seatColumn + val?.seatRow
-    })
+  const handleShowTextSeat = () => {
+    const string = seats.map((val) => {
+      return val?.seatColumn + val?.seatRow;
+    });
     const price = seats.reduce((acc, val) => {
-        return acc + val?.price
-    }, 0)
+      return acc + val?.price;
+    }, 0);
     return {
-        text:  seats.length + 'x vé ' + string.toString(),
-        price
-    }
-  }
+      text: seats.length + "x vé " + string.toString(),
+      price,
+    };
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     const products = seats.map((seat) => {
       return {
         id: seat?.Product?.id,
@@ -84,44 +95,58 @@ const useBookingPreviewHook = () => {
       totalMoney: totalPriceTmp,
       products: productPayLoad,
     };
-
+    setLoaddingGetPromotion(true)
     checkPromotionCinema(dataPayload)
-    .then(res => {
-      const data = res.filter(val =>{
-        return val?.warning !== true
+      .then((res) => {
+        const data = res.filter((val) => {
+          return val?.warning !== true;
+        });
+
+        const newData = data.map((val) => {
+          return { ...val, isActive: true };
+        });
+
+        depatch(SetPromotion(newData));
       })
-      setPromotion(data)
+      .catch((err) => {
+        console.log(err);
+        alert("Lỗi lấy khuyễn mãi");
+      }).finally(() => {
+        setLoaddingGetPromotion(false)
       })
-      .catch(err => {
-        alert('Lỗi lấy khuyễn mãi')
+      
+  }, [totalPriceTmp]);
+
+  useEffect(() => {
+    const discount = promotion?.reduce((acc, val) => {
+      if (val?.isActive) {
+        return acc + val?.discount;
+      }
+      return acc + 0;
+    }, 0);
+    setMoneyPromotion(discount);
+  }, [promotion]);
+
+  useEffect(() => {
+    getAllHalls()
+      .then((data) => {
+        const dataCinemaHall = data.filter((val) => {
+          return val?.id === show?.Show?.idCinemaHall;
+        });
+        setCinemaHall(dataCinemaHall[0]);
       })
-  
-  }, [totalPriceTmp])
+      .catch(() => {});
+  }, []);
 
-  useEffect(()=>{
-    const discount = promotion.reduce((acc, val) => {
-      return acc + val?.discount
-  }, 0)
-  setMoneyPromotion(discount)
-  }, [promotion])
+  const handlePayment = () => {
+    if (!selectedId) {
+      alert("Hãy chọn phương thức thanh toán.");
+      return;
+    }
+    setIsOpen(true);
+  };
 
-  useEffect(()=>{
-    getAllHalls().then((data)=>{
-      const dataCinemaHall = data.filter(val =>{
-        return val?.id === show?.Show?.idCinemaHall
-      })
-      setCinemaHall(dataCinemaHall[0])
-    }).catch(() =>{
-
-    })
-  
-  }, [])
-
-  const handlePayment = () =>{
-    setIsOpen(true)
-  }
-
-  const handleCreateOrder = async () =>{
+  const handleCreateOrder = async () => {
     const dataSeatPayLoad = seats?.map((seat) => {
       return {
         idSeat: seat?.id,
@@ -139,7 +164,7 @@ const useBookingPreviewHook = () => {
     });
 
     const promotionClear = promotion?.filter((product) => {
-      if (product?.promotionCode) {
+      if (product?.promotionCode && product?.isActive) {
         return product;
       }
     });
@@ -152,29 +177,29 @@ const useBookingPreviewHook = () => {
     });
 
     let price = totalPriceTmp - moneyPromotion;
-    
+
     const dataPayload = {
       idShowMovie: show?.id,
       idCustomer: userLogin?.customer?.id,
-      idStaff: 5,
       totalPrice: price,
       seats: [...dataSeatPayLoad],
       product_sp: [...dataProductPayLoad],
       promotionApplicalbe: [...dataPromotionPayLoad],
     };
 
-    createPayZalo(price).then((data)=>{
-      Linking.openURL(data?.result?.order_url)
-      const callBank = setInterval(() =>{
-        checkStatus(data?.result?.appTransId, data?.result?.appTime).then((data) => {
-          console.log(data?.status);
+    createPayZalo(price).then((data) => {
+      Linking.openURL(data?.result?.order_url);
+      const callBank = setInterval(() => {
+        checkStatus(data?.result?.appTransId, data?.result?.appTime).then(
+          (data) => {
+            // console.log(data?.status);
             // if(data?.status === 1){
             //   createOrderMethod(dataPayload).then(data =>{
             //     alert("Thanh toán thành công, click OK để về Home")
             //     clearInterval(callBank)
             //     navigation.navigate("HomePage")
             //   }).catch(() =>{
-          
+
             //   })
             // }else if(data?.status === 2){
             //  // alert("Thanh toán thất bại")
@@ -183,22 +208,30 @@ const useBookingPreviewHook = () => {
             //   //alert("Đang chờ thanh toán")
             //   clearInterval(callBank)
             // }
-            if(data?.status === 2){
-              createOrderMethod(dataPayload).then(data =>{
-                alert("Thanh toán thành công, click OK để về Home")
-                clearInterval(callBank)
-                navigation.navigate("HomePage")
-              }).catch(() =>{
-          
-              })
+            if (data?.status === 2) {
+              createOrderMethod(dataPayload)
+                .then((data) => {
+                  depatch(SetPromotion([]));
+                  clearInterval(callBank);
+                  navigation.navigate("HomePage");
+                  navigation.navigate("TicketBooked");
+                })
+                .catch(() => {});
             }
-        })
+          }
+        );
       }, 5000);
-    })
+    });
+  };
+  // console.log(promotion);
+  const handleShowPromotion = () => {
 
+      navigation.navigate("PromotionScreen", { promotion });
     
+  };
+  const handleClickZaloPay = () => {
+    setSelectedId(!selectedId)
   }
-
   return {
     seats,
     film,
@@ -216,7 +249,12 @@ const useBookingPreviewHook = () => {
     isOpen,
     setIsOpen,
     onClose,
-    handleCreateOrder
+    handleCreateOrder,
+    selectedId,
+    handleShowPromotion,
+    setSelectedId,
+    handleClickZaloPay,
+    loaddingGetPromotion
   };
 };
 

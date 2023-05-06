@@ -19,6 +19,9 @@ const orderApi = {
     getByType: (type) => {
         return axiosApi.get(`order/type/${type}`);
     },
+    getOrdersByIdCustomer: (type) => {
+        return axiosApi.get(`order/customer/${type}`);
+    },
     
 };
 

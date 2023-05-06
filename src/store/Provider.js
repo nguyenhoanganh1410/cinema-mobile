@@ -5,7 +5,6 @@ import Reducer, { initState } from "./Reducer"
 
 const Provider = ({ children}) =>{
     const [state, depatch] = useReducer(Reducer, initState)
-  
 
     return (
         <Contex.Provider value={{state, depatch}}>

@@ -77,7 +77,7 @@ const PickSeatComponent = () => {
               {arrColumn.map((val) => {
                 return (
                   <TouchableOpacity
-                    style={{ marginBottom: 18 }}
+                    style={{ marginBottom: 22 }}
                     key={Math.random().toString()}
                   >
                     <Text>{val}</Text>
@@ -101,8 +101,6 @@ const PickSeatComponent = () => {
                       }
                       return false;
                     });
-
-                    console.log(item);
                     if (index != -1) {
                       return (
                         <SeatComponent
@@ -258,6 +256,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     paddingVertical: 12,
     paddingHorizontal: 12,
+    flexDirection:"row"
   },
   center: {
     flex: 1,

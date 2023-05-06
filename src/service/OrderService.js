@@ -8,3 +8,12 @@ export const createOrderMethod = async (data) => {
     throw error;
   }
 };
+
+export const getOrderByIdCustomer = async (data) => {
+  try {
+    const response = await orderApi.getOrdersByIdCustomer(data)
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

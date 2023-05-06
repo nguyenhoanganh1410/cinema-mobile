@@ -22,7 +22,7 @@ const imageUrl = "https://images.unsplash.com/photo-1526045612212-70caf35c14df";
 export default function UpdateProfilePage({ navigation: {goBack} }) {
   const { state, depatch } = useContext(Contex);
   const { userLogin } = state;
-
+  const navigation = useNavigation()
   const handleUpdate = () => {
     goBack()
   };
@@ -125,7 +125,7 @@ export default function UpdateProfilePage({ navigation: {goBack} }) {
               )}
             </Formik>
 
-            <TouchableOpacity style={styles.recoverPassword}>
+            <TouchableOpacity style={styles.recoverPassword} onPress={() => navigation.navigate("ResetPassword")}>
               <Text style={{ color: "black" }}>Đổi mật khẩu ?</Text>
             </TouchableOpacity>
           </View>

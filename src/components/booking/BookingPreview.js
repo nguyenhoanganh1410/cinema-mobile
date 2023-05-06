@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Button, FlatList, Image, TouchableOpacity } from "react-native";
 import { StyleSheet, View, Text, SafeAreaView, ScrollView } from "react-native";
-import { GHE_DOI, GHE_THUONG, MESSAGE_PAYMENT_ALERT, VND } from "../../constant";
+import {
+  GHE_DOI,
+  GHE_THUONG,
+  MESSAGE_PAYMENT_ALERT,
+  VND,
+} from "../../constant";
 import CountDownTime from "../../utils/CountDownTime";
 import RadioGroup from "react-native-radio-buttons-group";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import useBookingPreviewHook from "./useBookingPreviewHook";
 import AlertDialogCustom from "../dialog/AlertDialog";
+import Loadding from "../loading/Loadding";
 const BookingPreview = () => {
   const {
     film,
@@ -22,18 +28,13 @@ const BookingPreview = () => {
     totalPrice,
     seats,
     products,
-    handleCreateOrder
+    handleCreateOrder,
+    selectedId,
+    setSelectedId,
+    handleShowPromotion,
+    handleClickZaloPay,
+    loaddingGetPromotion,
   } = useBookingPreviewHook();
-  const [radioButtons, setRadioButtons] = useState([
-    {
-      id: "1", // acts as primary key, should be unique and non-empty string
-      label: "",
-      value: "option1",
-    },
-  ]);
-  function onPressRadioButton(radioButtonsArray) {
-    setRadioButtons(radioButtonsArray);
-  }
 
   const RenderProducts = () => {
     const data = products.map((val) => {
@@ -116,7 +117,7 @@ const BookingPreview = () => {
           </View>
           <View style={styles.detailProduct}></View>
         </View>
-        <TouchableOpacity style={[styles.blockFirst, { marginTop: 28 }]}>
+        <TouchableOpacity onPress={handleShowPromotion} style={[styles.blockFirst, { marginTop: 28 }]}>
           <View
             style={{
               flexDirection: "row",
@@ -124,7 +125,9 @@ const BookingPreview = () => {
               justifyContent: "space-between",
             }}
           >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <TouchableOpacity
+              style={{ flexDirection: "row", alignItems: "center" }}
+            >
               <Image
                 style={styles.image}
                 source={{
@@ -134,19 +137,30 @@ const BookingPreview = () => {
               <Text style={{ fontWeight: "500", marginLeft: 6 }}>
                 Khuyến mãi
               </Text>
-            </View>
+            </TouchableOpacity>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              {promotion &&
-                promotion.map((val) => {
-                  return (
-                    <View
-                      key={Math.random().toString()}
-                      style={styles.proBlock}
-                    >
-                      <Text style={styles.proText}>{val?.promotionCode}</Text>
-                    </View>
-                  );
-                })}
+              {loaddingGetPromotion ? (
+                <Loadding />
+              ) : (
+                <>
+                  {promotion &&
+                    promotion.map((val) => {
+                      if (!val?.isActive) {
+                        return null;
+                      }
+                      return (
+                        <View
+                          key={Math.random().toString()}
+                          style={styles.proBlock}
+                        >
+                          <Text style={styles.proText}>
+                            {val?.promotionCode}
+                          </Text>
+                        </View>
+                      );
+                    })}
+                </>
+              )}
 
               <Image
                 style={styles.imageIcon}
@@ -170,7 +184,10 @@ const BookingPreview = () => {
         >
           Thông tin thanh toán
         </Text>
-        <TouchableOpacity style={styles.blockFirst}>
+        <TouchableOpacity
+          style={styles.blockFirst}
+          onPress={handleClickZaloPay}
+        >
           <View
             style={{
               flexDirection: "row",
@@ -189,10 +206,32 @@ const BookingPreview = () => {
                 Ví ZaloPay
               </Text>
             </View>
-            <RadioGroup
-              radioButtons={radioButtons}
-              onPress={onPressRadioButton}
-            />
+            <View
+              style={{
+                width: 20,
+                position: "absolute",
+                right: 0,
+                top: "25%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: 20,
+                borderWidth: 1,
+                borderColor: "black",
+                borderRadius: 100,
+              }}
+            >
+              {selectedId ? (
+                <View
+                  style={{
+                    width: 16,
+                    height: 16,
+                    borderRadius: 100,
+                    backgroundColor: "gray",
+                  }}
+                ></View>
+              ) : null}
+            </View>
           </View>
 
           <View style={styles.detailProduct}></View>
@@ -220,7 +259,12 @@ const BookingPreview = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <AlertDialogCustom callBack={handleCreateOrder} isOpen={isOpen} onClose={onClose} content={MESSAGE_PAYMENT_ALERT} />
+      <AlertDialogCustom
+        callBack={handleCreateOrder}
+        isOpen={isOpen}
+        onClose={onClose}
+        content={MESSAGE_PAYMENT_ALERT}
+      />
     </SafeAreaView>
   );
 };

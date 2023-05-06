@@ -1,4 +1,4 @@
-import { SET_BOOKING, SET_CART, SET_USERLOGIN } from "./Actions";
+import { SET_BOOKING, SET_CART, SET_PROMOTION, SET_PROMOTIONNOTACTIVE, SET_PROMOTIONWILLACTIVE, SET_USERLOGIN } from "./Actions";
 
 //innite state
 const initState = {
@@ -6,6 +6,9 @@ const initState = {
   cart: [],
   userLogin: null,
   booking: null,
+  promotion: [],
+  promotionNotActive: [],
+  promotionWillActive: []
 };
 
 //depatch
@@ -29,6 +32,27 @@ const Reducer = (state, action) => {
       return {
         ...state,
         booking: action.payload,
+      };
+  }
+  switch (action.type) {
+    case SET_PROMOTION:
+      return {
+        ...state,
+        promotion: action.payload,
+      };
+  }
+  switch (action.type) {
+    case SET_PROMOTIONNOTACTIVE:
+      return {
+        ...state,
+        promotionNotActive: action.payload,
+      };
+  }
+  switch (action.type) {
+    case SET_PROMOTIONWILLACTIVE:
+      return {
+        ...state,
+        promotionWillActive: action.payload,
       };
   }
 };

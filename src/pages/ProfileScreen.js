@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,12 +10,11 @@ import {
 import { TouchableOpacity } from "react-native-gesture-handler";
 import AntDesign from "react-native-vector-icons/AntDesign";
 
-
 import { useNavigation } from "@react-navigation/native";
 import Contex from "../store/Context";
 import { SetUserLogin } from "../store/Actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { getMemberShipById } from "../service/userService";
 
 const data = [
   {
@@ -47,17 +46,26 @@ const data = [
 ];
 
 const ProfileScreen = () => {
-    const navigation = useNavigation()
-    const { state, depatch } = useContext(Contex);
-    const { userLogin } = state;
-   
-    console.log(userLogin?.customer?.firstName);
-    const handleLogOut = async () =>{
-      navigation.navigate("Home")
-      depatch(SetUserLogin(null))
-      await AsyncStorage.removeItem("user");
-    }
+  const navigation = useNavigation();
+  const { state, depatch } = useContext(Contex);
+  const [memberShip, setMemberShip] = useState(null);
+  const { userLogin } = state;
 
+  const handleLogOut = async () => {
+    navigation.navigate("Home");
+    depatch(SetUserLogin(null));
+    await AsyncStorage.removeItem("user");
+  };
+
+  useEffect(() => {
+    getMemberShipById(userLogin?.customer?.id)
+      .then((val) => {
+        setMemberShip(val);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={{ flex: 1, paddingVertical: 16 }}>
@@ -84,13 +92,23 @@ const ProfileScreen = () => {
                 }}
               />
               <View>
-                <Text style={{ fontWeight: "700", fontSize: 16, textTransform:"capitalize" }}>
-                  {userLogin ? userLogin?.customer?.firstName + " " + userLogin?.customer?.lastName : ""}
+                <Text
+                  style={{
+                    fontWeight: "700",
+                    fontSize: 16,
+                    textTransform: "capitalize",
+                  }}
+                >
+                  {userLogin
+                    ? userLogin?.customer?.firstName +
+                      " " +
+                      userLogin?.customer?.lastName
+                    : ""}
                 </Text>
                 <Text
-                  style={{ fontWeight: "600", fontSize: 12, color: "orange" }}
+                  style={{ fontWeight: "600", fontSize: 10, color: "orange" }}
                 >
-                  start
+                  {memberShip?.Rank?.nameRank}
                 </Text>
               </View>
             </View>
@@ -101,7 +119,9 @@ const ProfileScreen = () => {
                   uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKUFdpk0cUspRgRm_T91DFtSY3l4q0FjUQwg&usqp=CAU",
                 }}
               />
-              <Text style={{ marginTop: 8 }}>0 điểm</Text>
+              <Text style={{ marginTop: 8 }}>
+                {memberShip?.currentPoint} điểm
+              </Text>
             </View>
           </View>
         </View>
@@ -135,6 +155,7 @@ const ProfileScreen = () => {
             <Text style={{ fontWeight: "600", fontSize: 14 }}>Thông tin</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => navigation.navigate("TicketBooked")}
             style={{
               flexDirection: "row",
               alignItems: "center",
@@ -185,6 +206,7 @@ const ProfileScreen = () => {
             justifyContent: "space-between",
             alignItems: "center",
             marginTop: 24,
+            position: "relative",
           }}
         >
           <View
@@ -222,6 +244,7 @@ const ProfileScreen = () => {
               marginLeft: -8,
             }}
           ></View>
+
           <View
             style={{
               flexDirection: "column",

@@ -10,20 +10,28 @@ import {
 } from "react-native";
 import React, { useContext, useState } from "react";
 import Contex from "../store/Context";
-import { SetUserLogin } from "../store/Actions";
 import { Formik } from "formik";
-import userApi from "../api/userApi";
-import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import SimpleLottie from "../components/loading/CatSleeping";
 
-const imageUrl = "https://images.unsplash.com/photo-1526045612212-70caf35c14df";
-
-export default function SignUpSuccessPage({ route, navigation: { goBack } }) {
+export default function ResetPassword({ navigation }) {
   const { state, depatch } = useContext(Contex);
   const { userLogin } = state;
-  const { content, button } = route.params;
-  //const navigation = useNavigation()
+
+  const handleLogin = async (values) => {
+    const { confirmPassword, password } = values;
+    if (!confirmPassword || !password) {
+      alert("Chưa nhập mật khẩu.");
+      return;
+    } else if (password !== confirmPassword) {
+      alert("Mật khẩu phải trùng nhau.");
+      return;
+    }
+
+    navigation.navigate("SignUpSuccessPage", {
+        content: "Bạn đã đổi mật khẩu thành công.",
+        button: "Về trang chủ"
+    })
+  };
 
   return (
     <View style={styles.AndroidSafeArea}>
@@ -58,30 +66,61 @@ export default function SignUpSuccessPage({ route, navigation: { goBack } }) {
               <Text
                 style={{
                   fontSize: 14,
-
-                  marginBottom: 20,
-                  marginTop: 20,
+                  marginBottom: 10,
                   textAlign: "center",
                   fontWeight: "400",
                   //color:"#6ECB63"
                 }}
               >
-                {content
-                  ? content
-                  : " Bạn đã đăng ký tài khoản thành công. Vui lòng check mail để mở tài khoản."}
+                Đổi mật khẩu tài khoản.
               </Text>
             </View>
 
-            <View>
-              <TouchableOpacity
-                style={styles.btn}
-                onPress={() => goBack("Login")}
-              >
-                <Text style={{ color: "white", fontSize: 16 }}>
-                  {button ? button : " Đăng ký tiếp"}
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <Formik
+              initialValues={{ password: "", confirmPassword: "" }}
+              onSubmit={(values) => handleLogin(values)}
+            >
+              {({ handleChange, handleBlur, handleSubmit, values }) => (
+                <>
+                  <View style={styles.viewInput}>
+                    <TextInput
+                      style={{ paddingLeft: 10, color: "#333" }}
+                      placeholder="Password"
+                      value={values.password}
+                      onChangeText={handleChange("password")}
+                      secure={true}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      textContentType="newPassword"
+                      secureTextEntry
+                      enablesReturnKeyAutomatically
+                    />
+                  </View>
+
+                  <View style={styles.viewInput}>
+                    <TextInput
+                      style={{ paddingLeft: 10, color: "#333" }}
+                      placeholder="Confirm Password"
+                      value={values.confirmPassword}
+                      onChangeText={handleChange("confirmPassword")}
+                      secure={true}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      textContentType="confirmPassword"
+                      secureTextEntry
+                      enablesReturnKeyAutomatically
+                    />
+                  </View>
+                  <View>
+                    <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
+                      <Text style={{ color: "white", fontSize: 14 }}>
+                        Cập nhật
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              )}
+            </Formik>
           </View>
         </View>
       </View>
@@ -103,7 +142,7 @@ const styles = StyleSheet.create({
     // backgroundColor:"red"
   },
   downView: {
-    flex: 1.5,
+    flex: 2,
 
     alignItems: "center",
     display: "flex",

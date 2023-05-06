@@ -13,7 +13,7 @@ const PickFilmScreen = ({route}) => {
   const [film, setFilm] = useState(null);
   const {id } = route.params;
   const [isActive, setIsActive] = useState(0)
-  console.log(film)
+
   useEffect(()=>{
     const getFilm = async (id) =>{
       const data = await movieApi.getMovieById(id)

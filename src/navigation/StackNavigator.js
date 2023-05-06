@@ -19,6 +19,10 @@ import ForgotPassword from "../pages/ForgotPassword";
 import ProfileScreen from "../pages/ProfileScreen";
 import SignUpSuccessPage from "../pages/SignUpSuccessPage";
 import UpdateProfilePage from "../pages/UpdateProfilePage";
+import TicketBooked from "../pages/TicketBooked";
+import TicketDetails from "../pages/TicketDetails";
+import PromotionScreen from "../components/booking/PromotionScreen";
+import ResetPassword from "../pages/ResetPassword";
 
 const Stack = createStackNavigator();
 
@@ -29,8 +33,8 @@ const screenOptionStyle = {
   headerTintColor: "black",
   headerBackTitle: "",
   headerTitleStyle: {
-    fontWeight: 'bold',
-    color:'black',
+    fontWeight: "bold",
+    color: "black",
   },
 };
 
@@ -43,29 +47,40 @@ const HomeStackNavigator = () => {
         component={HomePage}
       />
       <Stack.Screen
-        options={{ title: 'Chọn suất chiếu' }}
+        options={{ title: "Chọn suất chiếu" }}
         name="FilmDetail"
         component={TopBarNavigation}
       />
       <Stack.Screen
-        options={{ title: 'Chọn ghế' }}
+        options={{ title: "Chọn ghế" }}
         name="PickFilm"
         component={PickFilmScreen}
       />
       <Stack.Screen
-        options={{ title: 'Chọn ghế' }}
+        options={{ title: "Chọn ghế" }}
         name="PickSeatScreen"
         component={PickSeatComponent}
       />
       <Stack.Screen
-       options={{ title: 'Chọn bắp nước' }}
+        options={{ title: "Chọn bắp nước" }}
         name="PickProducts"
         component={PickProduct}
       />
       <Stack.Screen
-      options={{ title: 'Thanh toán' }}
+        options={{ title: "Khuyễn mãi" }}
+        name="PromotionScreen"
+        component={PromotionScreen}
+      />
+      <Stack.Screen
+        options={{ title: "Thanh toán" }}
         name="BookingPreview"
         component={BookingPreview}
+      />
+       <Stack.Screen
+       // options={{ headerShown: false }}
+       options={{ title: "Thành công" }}
+        name="SignUpSuccessPage"
+        component={SignUpSuccessPage}
       />
     </Stack.Navigator>
   );
@@ -103,10 +118,26 @@ const ProfileStackNavigator = () => {
         name="Profile"
         component={ProfileScreen}
       />
-       <Stack.Screen
-       // options={{ headerShown: false }}
+      <Stack.Screen
+        // options={{ headerShown: false }}
         name="UpdateProfile"
         component={UpdateProfilePage}
+      />
+      <Stack.Screen
+        // options={{ headerShown: false }}
+        name="TicketBooked"
+        component={TicketBooked}
+      />
+      <Stack.Screen
+        // options={{ headerShown: false }}
+        name="TicketDetails"
+        component={TicketDetails}
+      />
+      <Stack.Screen
+       // options={{ headerShown: false }}
+       options={{ title: "Đổi mật khẩu" }}
+        name="ResetPassword"
+        component={ResetPassword}
       />
     </Stack.Navigator>
   );
@@ -124,12 +155,12 @@ const LoginStackNavigator = () => {
         name="SignUp"
         component={Register}
       />
-       <Stack.Screen
+      <Stack.Screen
         options={{ headerShown: false }}
         name="SignUpSuccessPage"
         component={SignUpSuccessPage}
       />
-       <Stack.Screen
+      <Stack.Screen
         options={{ headerShown: false }}
         name="Forgot"
         component={ForgotPassword}

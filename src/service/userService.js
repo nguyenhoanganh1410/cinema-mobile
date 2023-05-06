@@ -12,3 +12,11 @@ export const SignUpUser = async (data) => {
 };
 
 
+export const getMemberShipById = async (id) => {
+  try {
+    const data = await userApi.getMemberShip(id)
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
