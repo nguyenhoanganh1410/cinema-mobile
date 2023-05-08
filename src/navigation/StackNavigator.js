@@ -76,6 +76,11 @@ const HomeStackNavigator = () => {
         name="BookingPreview"
         component={BookingPreview}
       />
+        <Stack.Screen
+        // options={{ headerShown: false }}
+        name="TicketBooked"
+        component={TicketBooked}
+      />
        <Stack.Screen
        // options={{ headerShown: false }}
        options={{ title: "Thành công" }}

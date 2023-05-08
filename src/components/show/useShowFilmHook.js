@@ -23,8 +23,8 @@ const useShowFilmHook = (url) => {
   const [value, setValue] = useState("LVV");
   const [cinemas, setCinemas] = useState([
     { label: "Tất cả rạp", value: "LVV" },
-    { label: "Cinema LVV", value: "LVV1" },
-    { label: "Cinema LVV", value: "LVV2" },
+    // { label: "Cinema LVV", value: "LVV1" },
+    // { label: "Cinema LVV", value: "LVV2" },
   ]);
   const [shows, setShows] = useState([]);
 

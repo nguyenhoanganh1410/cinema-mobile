@@ -108,6 +108,7 @@ const PickSeatComponent = () => {
                           handlePress={handlePress}
                           bgColor="orange"
                           color=""
+                          key={Math.random()}
                           text={item?.seatColumn + item?.seatRow}
                         />
                       );
@@ -119,6 +120,7 @@ const PickSeatComponent = () => {
                           handlePress={handlePress}
                           bgColor="gray"
                           color="black"
+                          key={Math.random()}
                         />
                       );
                     } else if (item?.statusSeat) {
@@ -128,6 +130,7 @@ const PickSeatComponent = () => {
                           handlePress={handlePress}
                           bgColor="red"
                           color="black"
+                          key={Math.random()}
                         />
                       );
                     } else if (item?.Product?.typeSeat === 3) {
@@ -136,6 +139,7 @@ const PickSeatComponent = () => {
                           item={item}
                           handlePress={handlePress}
                           bgColor="white"
+                          key={Math.random()}
                           color="black"
                         />
                       );
@@ -146,6 +150,7 @@ const PickSeatComponent = () => {
                           handlePress={handlePress}
                           bgColor="white"
                           color="#96CD39"
+                          key={Math.random()}
                         />
                       );
                     }

@@ -56,7 +56,7 @@ const TabNavigator = () => {
       
       <Tab.Screen options={{ headerShown: false}} name="Home" component={HomeStackNavigator} />
       <Tab.Screen  options={{ headerShown: false}} name="Rạp" component={ShowStackNavigator} />
-      <Tab.Screen   options={{ headerShown: false}}name="Khuyến mãi" component={PromotionStackNavigator} />
+      {/* <Tab.Screen   options={{ headerShown: false}}name="Khuyến mãi" component={PromotionStackNavigator} /> */}
       <Tab.Screen   options={{ headerShown: false}}name="Tài khoản" component={userLogin ? ProfileStackNavigator: LoginStackNavigator} />
     </Tab.Navigator>
   );

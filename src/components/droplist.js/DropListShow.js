@@ -13,6 +13,7 @@ const DropListShow = ({ idx, status, show, setIsOpen }) => {
     handleClick,
     dataFilter,
   } = useDropListHook({ idx, status, show , setIsOpen });
+  console.log(Math.random())
   return (
       <TouchableOpacity
         onPress={handleShowList}
@@ -37,6 +38,7 @@ const DropListShow = ({ idx, status, show, setIsOpen }) => {
                 <TouchableOpacity
                   onPress={() => handleClick(val)}
                   style={styles.show}
+                  key={Math.random()}
                 >
                   <Text>{val?.ShowTime?.showTime}</Text>
                 </TouchableOpacity>

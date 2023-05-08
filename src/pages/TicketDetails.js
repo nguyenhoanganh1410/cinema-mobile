@@ -104,7 +104,7 @@ const TicketDetails = ({ route, navigation }) => {
               {VND.format(+item?.totalPrice)}
             </Text>
           </View>
-          <View
+          {/* <View
             style={{
               marginBottom: 12,
               flexDirection: "row",
@@ -115,7 +115,7 @@ const TicketDetails = ({ route, navigation }) => {
               Dịch vụ: 2x bắp, 1x nước
             </Text>
             <Text style={{ fontSize: 14, fontWeight: "500" }}>0đ</Text>
-          </View>
+          </View> */}
           <View
             style={{
               marginBottom: 12,

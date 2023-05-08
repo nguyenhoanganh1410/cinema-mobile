@@ -40,7 +40,7 @@ const ShowFilm = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ marginHorizontal: 20, paddingBottom: 20 }}>
-        <View style={styles.optionTop}>
+        {/* <View style={styles.optionTop}>
           <DropDownPicker
             open={open}
             value={value}
@@ -48,11 +48,14 @@ const ShowFilm = () => {
             setOpen={setOpen}
             setValue={setValue}
             setItems={setCinemas}
+            placeholder="Select an item"
+            style={{zIndex: 100, position:"relative"}}
           />
-        </View>
-        <View style={styles.blocksTime}>
+        </View> */}
+        <View style={[styles.blocksTime, {marginTop: 20}]}>
           <FlatList
             horizontal
+            style={{zIndex: 0}}
             keyExtractor={() => Math.random()}
             data={[1, 2, 3, 4, 5, 6, 7]}
             renderItem={({ item }) => (
