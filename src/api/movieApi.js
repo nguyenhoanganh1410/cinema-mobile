@@ -5,6 +5,10 @@ const movieApi = {
     return axiosApi.get("/movie");
   },
 
+  getMovieByType: (type) => {
+    return axiosApi.get(`/movie/status/${type}`);
+  },
+  
   createMovie: (data) => {
     return axiosApi.post("/movie", data,{
       headers: {

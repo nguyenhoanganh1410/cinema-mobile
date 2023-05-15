@@ -9,3 +9,12 @@ export const checkPromotionCinema = async (data) => {
     throw error;
   }
 };
+
+export const getPromotionActive = async () => {
+  try {
+    const response = await promotionApi.getAllActivePromotionLine()
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

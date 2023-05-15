@@ -12,7 +12,7 @@ const useHomeFilmHook = (url) => {
   const navigation = useNavigation();
   useEffect(() => {
     const getFilms = async () => {
-      const data = await movieApi.getMovies();
+      const data = await movieApi.getMovieByType(1);
       setItems(data);
     };
     getFilms();

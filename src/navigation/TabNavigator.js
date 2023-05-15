@@ -7,7 +7,6 @@ import {  HomeStackNavigator, ShowStackNavigator, PromotionStackNavigator, Profi
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Contex from "../store/Context";
 import { SetUserLogin } from "../store/Actions";
-import DetailsFilm from "../pages/DetailsFilm";
 
 const Tab = createBottomTabNavigator();
 
@@ -56,7 +55,7 @@ const TabNavigator = () => {
       
       <Tab.Screen options={{ headerShown: false}} name="Home" component={HomeStackNavigator} />
       <Tab.Screen  options={{ headerShown: false}} name="Rạp" component={ShowStackNavigator} />
-      {/* <Tab.Screen   options={{ headerShown: false}}name="Khuyến mãi" component={PromotionStackNavigator} /> */}
+      <Tab.Screen   options={{ headerShown: false}}name="Khuyến mãi" component={PromotionStackNavigator} />
       <Tab.Screen   options={{ headerShown: false}}name="Tài khoản" component={userLogin ? ProfileStackNavigator: LoginStackNavigator} />
     </Tab.Navigator>
   );

@@ -5,6 +5,7 @@ import {
   GHE_DOI,
   GHE_THUONG,
   MESSAGE_PAYMENT_ALERT,
+  MESSAGE_PAYMENT_LOADDING_ALERT,
   VND,
 } from "../../constant";
 import CountDownTime from "../../utils/CountDownTime";
@@ -34,6 +35,9 @@ const BookingPreview = () => {
     handleShowPromotion,
     handleClickZaloPay,
     loaddingGetPromotion,
+    setLoaddingPayment,
+    loaddingPayment,
+    handleCancelOrder
   } = useBookingPreviewHook();
 
   const RenderProducts = () => {
@@ -264,6 +268,12 @@ const BookingPreview = () => {
         isOpen={isOpen}
         onClose={onClose}
         content={MESSAGE_PAYMENT_ALERT}
+      />
+      <AlertDialogCustom
+        callBack={handleCancelOrder}
+        isOpen={loaddingPayment}
+        onClose={onClose}
+        content={MESSAGE_PAYMENT_LOADDING_ALERT}
       />
     </SafeAreaView>
   );

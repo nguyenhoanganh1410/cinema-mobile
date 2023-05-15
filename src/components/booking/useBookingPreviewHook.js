@@ -29,11 +29,16 @@ const useBookingPreviewHook = () => {
   const [cinemaHall, setCinemaHall] = useState(null);
 
   const [isOpen, setIsOpen] = useState(false);
-  const onClose = () => setIsOpen(false);
+  const onClose = () => {
+    setIsOpen(false)
+    setLoaddingPayment(false)
+  };
 
   const [selectedId, setSelectedId] = useState(false);
 
   const [loaddingGetPromotion, setLoaddingGetPromotion] = useState(true)
+
+  const [loaddingPayment, setLoaddingPayment] = useState(false)
 
   useEffect(() => {
     depatch(SetPromotionWillActive([]))
@@ -71,6 +76,10 @@ const useBookingPreviewHook = () => {
     };
   };
 
+  const handleCancelOrder = () => {
+    setLoaddingPayment(false)
+    navigation.navigate("HomePage");
+  }
   useEffect(() => {
     const products = seats.map((seat) => {
       return {
@@ -147,6 +156,7 @@ const useBookingPreviewHook = () => {
   };
 
   const handleCreateOrder = async () => {
+    setLoaddingPayment(true)
     const dataSeatPayLoad = seats?.map((seat) => {
       return {
         idSeat: seat?.id,
@@ -190,37 +200,35 @@ const useBookingPreviewHook = () => {
     createPayZalo(price).then((data) => {
       Linking.openURL(data?.result?.order_url);
       const callBank = setInterval(() => {
-        checkStatus(data?.result?.appTransId, data?.result?.appTime).then(
+        checkStatus(data?.appTransId, data?.appTime).then(
           (data) => {
-            // console.log(data?.status);
-            // if(data?.status === 1){
-            //   createOrderMethod(dataPayload).then(data =>{
-            //     alert("Thanh toán thành công, click OK để về Home")
-            //     clearInterval(callBank)
-            //     navigation.navigate("HomePage")
-            //   }).catch(() =>{
-
-            //   })
-            // }else if(data?.status === 2){
-            //  // alert("Thanh toán thất bại")
-            //  clearInterval(callBank)
-            // }else{
-            //   //alert("Đang chờ thanh toán")
-            //   clearInterval(callBank)
-            // }
-            if (data?.status === 2) {
+             console.log(data?.status);
+            if(data?.status === 1){
               createOrderMethod(dataPayload)
-                .then((data) => {
-                  depatch(SetPromotion([]));
-                  clearInterval(callBank);
-                  navigation.navigate("HomePage");
-                  navigation.navigate("TicketBooked");
-                })
-                .catch(() => {});
+              .then((data) => {
+                depatch(SetPromotion([]));
+                clearInterval(callBank);
+                navigation.navigate("HomePage");
+                navigation.navigate("TicketBooked");
+              })
+              .catch(() => {});
+            }else if(data?.status === 2){
+              alert("Thanh toán thất bại")
+             clearInterval(callBank)
             }
+            // if (data?.status === 2) {
+            //   createOrderMethod(dataPayload)
+            //     .then((data) => {
+            //       depatch(SetPromotion([]));
+            //       clearInterval(callBank);
+            //       navigation.navigate("HomePage");
+            //       navigation.navigate("TicketBooked");
+            //     })
+            //     .catch(() => {});
+            // }
           }
         );
-      }, 5000);
+      }, 2000);
     });
   };
   // console.log(promotion);
@@ -254,7 +262,10 @@ const useBookingPreviewHook = () => {
     handleShowPromotion,
     setSelectedId,
     handleClickZaloPay,
-    loaddingGetPromotion
+    loaddingGetPromotion,
+    setLoaddingPayment,
+    loaddingPayment,
+    handleCancelOrder
   };
 };
 

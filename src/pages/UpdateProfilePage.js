@@ -46,6 +46,7 @@ export default function UpdateProfilePage({ navigation: { goBack } }) {
         goBack();
       })
       .catch((erro) => {
+        console.log(erro);
         alert("Lỗi hệ thống.");
       });
   };

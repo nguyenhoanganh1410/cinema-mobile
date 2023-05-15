@@ -23,6 +23,10 @@ const promotionApi = {
   checkPromotion: (data) => {
     return axiosApi.post(`/promotionHeader/check/promotion`, data);
   },
+
+  getAllActivePromotionLine: (all) => {
+    return axiosApi.get(`/promotionLine/active/all`);
+  },
 };
 
 export default promotionApi;

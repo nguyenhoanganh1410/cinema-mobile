@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, SafeAreaView,ScrollView, Dimensions, Image } from "react-native";
-import PropTypes from 'prop-types';
+
 // "https://www.bhdstar.vn/wp-content/uploads/2018/03/Visa-x-BHD-WEB.jpg",
 const images = [
   "https://www.bhdstar.vn/wp-content/uploads/2018/03/Traoquayeuthuong.1920x1080-1.png",
+  "https://img.freepik.com/premium-vector/cinema-design-background-yellow_44392-38.jpg",
   "https://cdn.pixabay.com/photo/2017/11/24/10/43/ticket-2974645__340.jpg",
   "https://cdn.pixabay.com/photo/2017/03/07/23/33/technology-2125547__340.jpg"
 ]

@@ -15,4 +15,5 @@ export const MESSAGE_NOT_ACCEPT =
   "Hãy hoàn tất giao dịch hoặc hủy để thực hiện chức năng mới.";
 
 export const MESSAGE_PAYMENT_ALERT = {type: 'payment' ,text:'Bạn muốn thanh toán?', buttonContent: 'Thanh toán'}
+export const MESSAGE_PAYMENT_LOADDING_ALERT = {type: 'payment' ,text:'Bạn đang thực hiện thanh toán, bạn muốn hủy?', buttonContent: 'Hủy thanh toán'}
 export const PayMent = 'payment'

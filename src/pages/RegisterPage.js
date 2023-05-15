@@ -45,7 +45,10 @@ export default function SignUp() {
     }
 
     SignUpUser(data).then((data) => {
-      navigation.navigate("SignUpSuccessPage")
+      navigation.navigate("SignUpSuccessPage", {
+        content: " Bạn đã đăng ký tài khoản thành công. Vui lòng check mail để mở tài khoản.",
+        button: "Đăng ký tiếp",
+      });
     }).catch(error => {
       console.log(error.message);
       alert("Email hoặc Số ĐT đã tồn tại.")
@@ -93,7 +96,7 @@ export default function SignUp() {
                       onChangeText={handleChange("name")}
                       onBlur={handleBlur("name")}
                       value={values.name}
-                      placeholder="Name"
+                      placeholder="Họ và tên"
                       style={{ paddingLeft: 10, color: "#333" }}
                     />
                   </View>
@@ -121,7 +124,7 @@ export default function SignUp() {
                   <View style={styles.viewInput}>
                       <TextInput
                       style={{ paddingLeft: 10, color: "#333" }}
-                      placeholder="password"
+                      placeholder="Mật khẩu"
                       value={values.password}
                       onChangeText={handleChange("password")}
                       secure={true}
@@ -135,7 +138,7 @@ export default function SignUp() {
                   <View style={styles.viewInput}>
                     <TextInput
                       style={{ paddingLeft: 10, color: "#333" }}
-                      placeholder="Confirm password"
+                      placeholder="Nhập lại mật khẩu"
                       value={values.confirmPassword}
                       onChangeText={handleChange("confirmPassword")}
                       secure={true}

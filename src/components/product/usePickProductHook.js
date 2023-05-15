@@ -26,7 +26,10 @@ const usePickProductHook = () => {
   useEffect(() => {
     getProductAndPrice()
       .then((data) => {
-        setProducts(data);
+        const dataFormat = data.filter(val => {
+          return val?.price > 0
+        })
+        setProducts(dataFormat);
       })
       .catch(() => {
         alert("Lỗi hệ thống khi lấy sản phẩm");

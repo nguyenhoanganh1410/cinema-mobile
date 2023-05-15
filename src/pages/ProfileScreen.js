@@ -69,7 +69,8 @@ const ProfileScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={{ flex: 1, paddingVertical: 16 }}>
-        <View
+        <TouchableOpacity
+         onPress={() => navigation.navigate("UpdateProfile")}
           style={{
             display: "flex",
             flexDirection: "row",
@@ -124,7 +125,7 @@ const ProfileScreen = () => {
               </Text>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
         <View
           style={{
             display: "flex",

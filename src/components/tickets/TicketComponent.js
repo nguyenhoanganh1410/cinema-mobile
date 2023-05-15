@@ -34,7 +34,7 @@ const TicketComponent = ({item}) => {
       <View style={{ paddingVertical: 12, flexDirection:'column', justifyContent:"space-between", height:"100%" }}>
         <View>
         <Text style={{ fontSize: 14, fontWeight: "500" }}>
-          {item?.ShowMovie?.Show?.Movie?.nameMovie}
+          {item?.ShowMovie?.Show?.Movie?.nameMovie?.length > 30 ? item?.ShowMovie?.Show?.Movie?.nameMovie.substring(0,25) + "..." : item?.ShowMovie?.Show?.Movie?.nameMovie}
         </Text>
         <Text style={{ fontSize: 12, fontWeight: "400", marginVertical: 6 }}>
         {item?.ShowMovie?.Show?.Cinema?.name} -  {item?.ShowMovie?.Show?.CinemaHall?.name}
@@ -53,7 +53,7 @@ const TicketComponent = ({item}) => {
           <Text style={{ fontSize: 12, fontWeight: "400", paddingVertical: 4 }}>
            Tổng tiền:  <Text style={{color:"green", marginLeft:10}}>{ VND.format(+item?.totalPrice - +item?.totalDiscount)}</Text>
           </Text>
-          <Text style={{ fontSize: 12, color: "#146C94", fontWeight: "400", textAlign:"right", marginLeft:0}}>
+          <Text style={{ fontSize: 12, color: "#146C94", fontWeight: "400", textAlign:"left", marginLeft:0}}>
            Ngày đặt: {date.toLocaleString()}
           </Text>
         </View>

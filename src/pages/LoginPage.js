@@ -37,7 +37,11 @@ export default function Login({ navigation }) {
         AsyncStorage.setItem("user", JSON.stringify(user.data));
       })
       .catch((erro) => {
-        alert(erro.response.data.message);
+        if(erro?.response?.data?.message === "Account is not activated") {
+          alert("Tài khoản chưa được xác minh. Hãy kiểm tra email.");
+        } else {
+          alert(erro?.response?.data?.message);
+        }
        // alert("Tài khoản hoặc mật khẩu sai!!")
       });
   };

@@ -14,8 +14,8 @@ const Tab = createBottomTabNavigator();
 export default function Index() {
   return (
     <NavigationContainer>
-      <DrawerNavigator />
-      {/* <TopBarNavigation /> */}
+      {/* <DrawerNavigator /> */}
+      <TabNavigator />
     </NavigationContainer>
   );
 }

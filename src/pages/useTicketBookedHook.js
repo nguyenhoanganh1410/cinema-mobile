@@ -6,7 +6,14 @@ const useTicketBookedHook = (url) => {
   const [listTicket, setListTicket] = useState([]);
   const { state, depatch } = useContext(Contex);
   const { booking, userLogin } = state;
+  const [refreshing, setRefreshing] = React.useState(false);
 
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 500);
+  }, []);
   useEffect(() => {
     getOrderByIdCustomer(userLogin?.customer?.id)
       .then((data) => {
@@ -17,7 +24,7 @@ const useTicketBookedHook = (url) => {
       });
   }, [userLogin]);
 
-  return {listTicket};
+  return { listTicket, refreshing, onRefresh };
 };
 
 export default useTicketBookedHook;
