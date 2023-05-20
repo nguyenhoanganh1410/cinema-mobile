@@ -78,7 +78,7 @@ export default function Login({ navigation }) {
               </Text>
             </View>
             <Formik
-              initialValues={{ email: "0397530256", password: "dang123" }}
+              initialValues={{ email: "", password: "" }}
               onSubmit={(values) => handleLogin(values)}
             >
               {({ handleChange, handleBlur, handleSubmit, values }) => (
@@ -99,6 +99,12 @@ export default function Login({ navigation }) {
                       placeholder="password"
                       value={values.password}
                       onChangeText={handleChange("password")}
+                      secure={true}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      textContentType="password"
+                      secureTextEntry
+                      enablesReturnKeyAutomatically
                     />
                   </View>
                   <View>

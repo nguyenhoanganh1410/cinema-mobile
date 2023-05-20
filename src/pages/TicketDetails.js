@@ -7,11 +7,12 @@ import {
   SafeAreaView,
   Image,
 } from "react-native";
+import QRCode from 'react-native-qrcode-svg';
 import { VND } from "../constant";
 
 const TicketDetails = ({ route, navigation }) => {
   const { item } = route.params;
-  console.log(item);
+  console.log(item?.id);
   const seatString = item?.OrderDetails?.map((val) => {
     if (val?.type === 1) {
       return val?.CinemaHallSeat?.seatColumn + val?.CinemaHallSeat?.seatRow;
@@ -101,7 +102,7 @@ const TicketDetails = ({ route, navigation }) => {
           >
             <Text style={{ fontSize: 12, fontWeight: "500" }}>Giá vé:</Text>
             <Text style={{ fontSize: 14, fontWeight: "500" }}>
-              {VND.format(+item?.totalPrice)}
+              {VND.format(+(item?.totalPrice + item?.totalDiscount))}
             </Text>
           </View>
           {/* <View
@@ -148,7 +149,7 @@ const TicketDetails = ({ route, navigation }) => {
           >
             <Text style={{ fontSize: 12, fontWeight: "500" }}>Tổng:</Text>
             <Text style={{ fontSize: 16, fontWeight: "600", color: "orange" }}>
-              {VND.format(+item?.totalPrice - +item?.totalDiscount)}
+              {VND.format(+item?.totalPrice)}
             </Text>
           </View>
           <Text style={{ fontSize: 12, fontWeight: "400", marginVertical: 12 }}>
@@ -158,6 +159,11 @@ const TicketDetails = ({ route, navigation }) => {
           <Text style={{ fontSize: 12, fontWeight: "400" }}>
             (*) Vé đã đặt không được hoàn trả, xin cảm ơn!
           </Text>
+         <View style={{marginTop:20, marginBottom: 20}}>
+          <QRCode
+              value={item?.id.toString()}
+            />
+         </View>
           <Image
             style={{
               width: "100%",

@@ -78,12 +78,21 @@ const ProfileScreen = () => {
             paddingHorizontal: 20,
           }}
         >
-          <Image
+          {
+            userLogin?.customer?.image ? 
+            <Image
+              style={styles.tinyLogo}
+              source={{
+                uri: userLogin?.customer?.image
+              }}
+            /> : 
+            <Image
             style={styles.tinyLogo}
             source={{
               uri: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png",
             }}
           />
+          }
           <View style={{ marginRight: 12 }}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Image

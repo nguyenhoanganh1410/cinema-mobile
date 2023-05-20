@@ -6,62 +6,149 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
   Alert,
 } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Contex from "../store/Context";
 import { SetUserLogin } from "../store/Actions";
 import { Formik } from "formik";
-import userApi from "../api/userApi";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import SimpleLottie from "../components/loading/CatSleeping";
-import { getCustomerById, updateInfoCustomer } from "../service/userService";
-
-const imageUrl = "https://images.unsplash.com/photo-1526045612212-70caf35c14df";
+import {
+  getCustomerById,
+  updateInfoCustomerById,
+} from "../service/userService";
+import * as ImagePicker from "expo-image-picker";
+import { storageRef } from "../config/Firebase";
 
 export default function UpdateProfilePage({ navigation: { goBack } }) {
   const { state, depatch } = useContext(Contex);
   const { userLogin } = state;
+  const [image, setImage] = useState("");
   const navigation = useNavigation();
-  const handleUpdate = (values) => {
+  const [onChangeImage, setOnChangeImage] = useState(false);
+  const [loadding, setLoadding] = useState(false);
+  const handleUpdate = async (values) => {
     const { name } = values;
     if (name.length === 0) {
       alert("Không được để trống.");
       return;
     }
-    console.log(name);
-    updateInfoCustomer(userLogin?.customer?.id, { firstName: name })
-      .then((data) => {
-        console.log(data);
-        getCustomerById(userLogin?.customer?.id).then((data) => {
-          const dataFormat = {customer: data}
-          console.log(dataFormat);
-          depatch(SetUserLogin(dataFormat));
-          AsyncStorage.setItem("user", JSON.stringify(dataFormat));
+    setLoadding(true);
+    if (onChangeImage) {
+      const filename = image.uri.substring(image.uri.lastIndexOf("/") + 1);
+      const imageBlob = await getBlobFroUri(image.uri);
+      storageRef
+        .child(`images/users/${filename}`)
+        .put(imageBlob)
+        .then((snapshot) => {
+          console.log("Uploaded a blob or file!");
+          storageRef
+            .child(`images/users/${filename}`)
+            .getDownloadURL()
+            .then((url) => {
+              updateInfoCustomerById(userLogin?.customer?.id, {
+                firstName: name,
+                image: url,
+              })
+                .then((data) => {
+                  //console.log(data);
+                  getCustomerById(userLogin?.customer?.id)
+                    .then((data) => {
+                      const dataFormat = { customer: data };
+                      // console.log(dataFormat);
+                      depatch(SetUserLogin(dataFormat));
+                      AsyncStorage.setItem("user", JSON.stringify(dataFormat));
+                    })
+                    .catch((erro) => {
+                      console.log(erro);
+                    });
+                  goBack();
+                })
+                .catch((erro) => {
+                  console.log(erro);
+                  alert("Lỗi hệ thống.");
+                })
+                .finally(() => setLoadding(false));
+            });
+        });
+    } else {
+      updateInfoCustomerById(userLogin?.customer?.id, { firstName: name })
+        .then((data) => {
+          //console.log(data);
+          getCustomerById(userLogin?.customer?.id)
+            .then((data) => {
+              const dataFormat = { customer: data };
+              // console.log(dataFormat);
+              depatch(SetUserLogin(dataFormat));
+              AsyncStorage.setItem("user", JSON.stringify(dataFormat));
+            })
+            .catch((erro) => {
+              console.log(erro);
+            });
+          goBack();
         })
-        .catch(erro => {
+        .catch((erro) => {
           console.log(erro);
+          alert("Lỗi hệ thống.");
         })
-        goBack();
-      })
-      .catch((erro) => {
-        console.log(erro);
-        alert("Lỗi hệ thống.");
-      });
+        .finally(() => setLoadding(false));
+    }
+    setOnChangeImage(false);
   };
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      const source = { uri: result.assets[0].uri };
+      setImage(source);
+      setOnChangeImage(true);
+    }
+  };
+
+  const getBlobFroUri = async (uri) => {
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
+
+    return blob;
+  };
+
+  useEffect(() => {
+    if (userLogin?.customer?.image) {
+      setImage({ uri: userLogin.customer.image });
+    }
+  }, []);
 
   return (
     <View style={styles.AndroidSafeArea}>
       <View style={styles.container}>
-        <View style={styles.topView}>
+        <TouchableOpacity style={styles.topView} onPress={() => pickImage()}>
           <Image
             style={styles.tinyLogo}
             source={{
-              uri: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png",
+              uri:
+                image?.uri ||
+                "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png",
             }}
           />
-        </View>
+        </TouchableOpacity>
 
         <View style={styles.downView}>
           <View style={styles.input}>
@@ -158,10 +245,25 @@ export default function UpdateProfilePage({ navigation: { goBack } }) {
           </View>
         </View>
       </View>
+      {loadding && (
+        <View style={styles.screenReload}>
+          <ActivityIndicator size="large" color="#00ff00" />
+        </View>
+      )}
     </View>
   );
 }
 const styles = StyleSheet.create({
+  screenReload: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0,0,0,0.3)",
+    position: "absolute",
+    top: 0,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   AndroidSafeArea: {
     flex: 1,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
@@ -229,5 +331,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 100,
     marginRight: 10,
+    borderWidth: 2,
+    borderColor: "orange",
   },
 });

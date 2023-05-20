@@ -27,6 +27,13 @@ const userApi = {
     return axiosApi.get(`/customer/${id}`);
   },
   
+  updateCustomerById: (id,data) => {
+    return axiosApi.put(`/customer/update-customer/${id}`, data);
+  },
+
+  forgotPassword: (data) => {
+    return axiosApi.post(`/customer/forgot-password`, data);
+  },
 };
 
 export default userApi;

@@ -11,7 +11,7 @@ const useShowFilmHook = (url) => {
   const [dateQuery, setDateQUery] = useState(moment().format(dateFormatQuery));
   const { state, depatch } = useContext(Contex);
   const { booking } = state;
-
+  const [loadding, setLoadding] = useState(true)
   const [isOpen, setIsOpen] = React.useState(false);
   const onClose = () => setIsOpen(false);
 
@@ -85,7 +85,7 @@ const useShowFilmHook = (url) => {
       })
       .catch(() => {
         alert("System Error!!");
-      });
+      }).finally(() => setLoadding(false));
   }, [datePicked]);
 
   return {
@@ -104,6 +104,7 @@ const useShowFilmHook = (url) => {
     setDateQUery,
     loading,
     setLoading,
+    loadding
   };
 };
 

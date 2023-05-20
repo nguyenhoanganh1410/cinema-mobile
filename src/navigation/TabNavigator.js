@@ -35,7 +35,7 @@ const TabNavigator = () => {
             } else if (route.name === "Rạp") {
               iconName = focused ? "ios-list" : "ios-list";
             } else if (route.name === "Khuyến mãi") {
-              iconName = focused ? "ios-list" : "ios-list";
+              iconName = focused ? "gift" : "gift";
             } else if (route.name === "Tài khoản") {
               iconName = focused ? "person" : "person";
             }

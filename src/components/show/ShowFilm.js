@@ -7,6 +7,7 @@ import {
   ScrollView,
   SafeAreaView,
   FlatList,
+  ActivityIndicator
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { url_cat, url_notFound } from "../../utils/LinkURL";
@@ -35,6 +36,7 @@ const ShowFilm = () => {
     isOpen,
     setIsOpen,
     onClose,
+    loadding
   } = useShowFilmHook();
 
   return (
@@ -125,11 +127,26 @@ const ShowFilm = () => {
         )}
       </ScrollView>
       <AlertDialogCustom isOpen={isOpen} onClose={onClose}/>
+      {loadding && (
+        <View style={styles.screenReload}>
+          <ActivityIndicator size="large" color="#00ff00" />
+        </View>
+      )}
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  screenReload: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0,0,0,0.3)",
+    position: "absolute",
+    top: 0,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   container: {
     flex: 1,
     backgroundColor: "white",

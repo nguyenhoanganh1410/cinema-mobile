@@ -19,5 +19,5 @@ export const checkStatus = async (p1, p2) => {
     } catch (error) {
       throw error;
     }
-  };
+};
   

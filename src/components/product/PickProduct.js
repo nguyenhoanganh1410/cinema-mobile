@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, FlatList, TouchableOpacity } from "react-native";
+import { Button, FlatList, TouchableOpacity, ActivityIndicator } from "react-native";
 import { StyleSheet, View, Text, SafeAreaView, ScrollView } from "react-native";
 import { GHE_DOI, GHE_THUONG, VND } from "../../constant";
 import CountDownTime from "../../utils/CountDownTime";
@@ -17,15 +17,14 @@ const PickProduct = () => {
     pickProducts,
     handleContinue,
     totalPrice,
+    loadding
   } = usePickProductHook();
+  console.log(loadding);
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.time}>
-        {/* <Text style={{ color: "white", fontSize: 12, fontWeight: 400 }}>
-          Thời gian giữ ghế: 14:12
-        </Text> */}
+      {/* <View style={styles.time}>
         <CountDownTime />
-      </View>
+      </View> */}
       <ScrollView style={{ flex: 1 }}>
         {products.map((p) => {
           if (p?.productName === GHE_DOI || p?.productName === GHE_THUONG) {
@@ -90,10 +89,25 @@ const PickProduct = () => {
           </TouchableOpacity>
         </View>
       </View>
+      {loadding && (
+        <View style={styles.screenReload}>
+          <ActivityIndicator size="large" color="#00ff00" />
+        </View>
+      )}
     </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({
+  screenReload: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0,0,0,0.3)",
+    position: "absolute",
+    top: 0,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   productPickedClass: {
     backgroundColor: "#DDDDDD",
     width: "100%",

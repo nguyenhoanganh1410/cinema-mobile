@@ -6,6 +6,7 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
   Alert,
 } from "react-native";
 import React, { useContext, useState } from "react";
@@ -16,22 +17,42 @@ import userApi from "../api/userApi";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import SimpleLottie from "../components/loading/CatSleeping";
-
-const imageUrl = "https://images.unsplash.com/photo-1526045612212-70caf35c14df";
+import { forgotPasswordHandler } from "../service/userService";
 
 export default function ForgotPassword({ navigation }) {
   const { state, depatch } = useContext(Contex);
   const { userLogin } = state;
-
+  const [loadding, setLoadding] = useState(false);
   const handleLogin = async (values) => {
     const { email } = values;
     if (!email) {
       alert("Chưa nhập email!");
       return;
+    } else if (!ValidateEmail(email)) {
+      alert("Email không đúng định dạng.");
+      return;
     }
-   
+    setLoadding(true);
+    forgotPasswordHandler({ email: email })
+      .then(() => {
+        navigation.navigate("SignUpSuccessPage", {
+          content: " Link đổi mật khẩu đã được gửi vào Email. Vui lòng kiểm tra.",
+          button: "Đăng nhập",
+        });
+      })
+      .catch((error) => {
+        alert("Email không tồn tại trong hệ thống.");
+        console.log(error);
+      })
+      .finally(() => setLoadding(false));
   };
+  function ValidateEmail(mail) {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+      return true;
+    }
 
+    return false;
+  }
   return (
     <View style={styles.AndroidSafeArea}>
       <View style={styles.container}>
@@ -75,8 +96,9 @@ export default function ForgotPassword({ navigation }) {
               </Text>
             </View>
             <Formik
-             initialValues={{ email: "" }}
-            onSubmit={(values) => handleLogin(values)}>
+              initialValues={{ email: "" }}
+              onSubmit={(values) => handleLogin(values)}
+            >
               {({ handleChange, handleBlur, handleSubmit, values }) => (
                 <>
                   <View style={styles.viewInput}>
@@ -109,10 +131,25 @@ export default function ForgotPassword({ navigation }) {
           </View>
         </View>
       </View>
+      {loadding && (
+        <View style={styles.screenReload}>
+          <ActivityIndicator size="large" color="#00ff00" />
+        </View>
+      )}
     </View>
   );
 }
 const styles = StyleSheet.create({
+  screenReload: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0,0,0,0.3)",
+    position: "absolute",
+    top: 0,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   AndroidSafeArea: {
     flex: 1,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,

@@ -58,9 +58,9 @@ const BookingPreview = () => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.time}>
+      {/* <View style={styles.time}>
         <CountDownTime />
-      </View>
+      </View> */}
       <ScrollView style={{ flex: 1, paddingVertical: 16 }}>
         <View style={styles.blockPreview}>
           <Image

@@ -29,7 +29,7 @@ const ShowTimePage = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
-        <Text style={styles.title}>Booking By Theater</Text>
+        <Text style={styles.title}>Hệ Thống Rạp</Text>
         <View>
           <TouchableOpacity style={styles.buttonGPlusStyle} activeOpacity={0.5}>
             <Text style={styles.buttonTextStyle}>TPHCM</Text>

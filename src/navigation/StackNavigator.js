@@ -87,6 +87,11 @@ const HomeStackNavigator = () => {
         name="SignUpSuccessPage"
         component={SignUpSuccessPage}
       />
+       <Stack.Screen
+        options={{ headerShown: false }}
+        name="Promotion"
+        component={Promotion}
+      />
     </Stack.Navigator>
   );
 };
@@ -125,16 +130,19 @@ const ProfileStackNavigator = () => {
       />
       <Stack.Screen
         // options={{ headerShown: false }}
+        options={{ title: "Cập nhật thông tin" }}
         name="UpdateProfile"
         component={UpdateProfilePage}
       />
       <Stack.Screen
         // options={{ headerShown: false }}
+        options={{ title: "Danh sách vé" }}
         name="TicketBooked"
         component={TicketBooked}
       />
       <Stack.Screen
         // options={{ headerShown: false }}
+        options={{ title: "Chi tiết vé" }}
         name="TicketDetails"
         component={TicketDetails}
       />

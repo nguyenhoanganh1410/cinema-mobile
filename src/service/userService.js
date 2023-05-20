@@ -30,6 +30,15 @@ export const updateInfoCustomer = async (id, dataPayload) => {
   }
 };
 
+export const updateInfoCustomerById = async (id, dataPayload) => {
+  try {
+    const data = await userApi.updateCustomerById(id, dataPayload)
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const updatePasswordCustomer = async (id, dataPayload) => {
   try {
     const data = await userApi.updatePassword(id, dataPayload)
@@ -42,6 +51,15 @@ export const updatePasswordCustomer = async (id, dataPayload) => {
 export const getCustomerById = async (id) => {
   try {
     const data = await userApi.getCustomer(id)
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const forgotPasswordHandler = async (dataa) => {
+  try {
+    const data = await userApi.forgotPassword(dataa)
     return data;
   } catch (error) {
     throw error;

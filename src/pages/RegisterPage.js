@@ -30,7 +30,7 @@ export default function SignUp() {
       alert("Yêu cầu nhập đủ thông tin.")
       return
     } else if(!phone.match(phoneno)){
-      alert("Số điện thoại không đúng định dạng.")
+      alert("Số điện thoại có 10 chữ số.")
       return
     }  else if(!email.match(validRegex)){
       alert("Email không đúng định dạng.")

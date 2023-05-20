@@ -13,7 +13,7 @@ const usePickProductHook = () => {
   const { state, depatch } = useContext(Contex);
   const { booking } = state;
   const { seats } = booking;
-
+  const [loadding, setLoadding] = useState(true)
   const navigation = useNavigation();
 
   const [products, setProducts] = useState([]);
@@ -24,6 +24,7 @@ const usePickProductHook = () => {
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
+    
     getProductAndPrice()
       .then((data) => {
         const dataFormat = data.filter(val => {
@@ -33,7 +34,7 @@ const usePickProductHook = () => {
       })
       .catch(() => {
         alert("Lỗi hệ thống khi lấy sản phẩm");
-      });
+      }).finally(() => setLoadding(false));
   }, []);
 
   useEffect(() => {
@@ -61,6 +62,7 @@ const usePickProductHook = () => {
     setQuality,
     totalPrice,
     handleContinue,
+    loadding
   };
 };
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, SafeAreaView,ScrollView, Dimensions, Image } from "react-native";
-
+import { StyleSheet, Text, View, TouchableOpacity,ScrollView, Dimensions, Image } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 // "https://www.bhdstar.vn/wp-content/uploads/2018/03/Visa-x-BHD-WEB.jpg",
 const images = [
   "https://www.bhdstar.vn/wp-content/uploads/2018/03/Traoquayeuthuong.1920x1080-1.png",
@@ -13,7 +13,7 @@ const WIDTH = Dimensions.get("window").width
 const HEIGHT = Dimensions.get("window").height
 const Carousel = () => {
   const [imageActive, setImageACtive] = useState(0)
-
+  const navigation = useNavigation()
   const onchange = (nativeEvent ) =>{
     if(nativeEvent){
       const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width)
@@ -35,11 +35,14 @@ const Carousel = () => {
             
             {
               images.map((e, index) =>{
-                return <Image key={e}
+                return <TouchableOpacity  onPress={() =>  navigation.navigate("Promotion") } >
+                   <Image key={e}
                       resizeMode="stretch"
                       style={styles.wrap}
                       source={{uri:e}}
+                     
                     />
+                </TouchableOpacity >
                 
               })
             }

@@ -20,6 +20,14 @@ const AlertDialogCustom = ({isOpen, onClose, content, callBack}) => {
       navigation.navigate("Login");
     }
   };
+
+  const handleClose = () => {
+    onClose()
+    if(content?.type == PayMent){
+      callBack()
+    }
+  }
+
   const cancelRef = React.useRef(null);
   return (
     <>
@@ -43,7 +51,7 @@ const AlertDialogCustom = ({isOpen, onClose, content, callBack}) => {
                 <Button
                   variant="unstyled"
                   colorScheme="coolGray"
-                  onPress={onClose}
+                  onPress={handleClose}
                   ref={cancelRef}
                 >
                   Hủy

@@ -24,6 +24,11 @@ const useBookingPreviewHook = () => {
 
   const [moneyPromotion, setMoneyPromotion] = useState(0);
 
+  const [dataOrder, setDataOrder] = useState(null)
+
+  const [count, setCount] = useState(0)
+
+  const [reCall, setReCall] = useState(false)
   //const [promotion, setPromotion] = useState([])
 
   const [cinemaHall, setCinemaHall] = useState(null);
@@ -39,6 +44,8 @@ const useBookingPreviewHook = () => {
   const [loaddingGetPromotion, setLoaddingGetPromotion] = useState(true)
 
   const [loaddingPayment, setLoaddingPayment] = useState(false)
+
+  const [dataZalo, setDataZalo] = useState(null)
 
   useEffect(() => {
     depatch(SetPromotionWillActive([]))
@@ -78,6 +85,7 @@ const useBookingPreviewHook = () => {
 
   const handleCancelOrder = () => {
     setLoaddingPayment(false)
+    setReCall(false)
     navigation.navigate("HomePage");
   }
   useEffect(() => {
@@ -196,50 +204,75 @@ const useBookingPreviewHook = () => {
       product_sp: [...dataProductPayLoad],
       promotionApplicalbe: [...dataPromotionPayLoad],
     };
-
+    setDataOrder(dataPayload)
     createPayZalo(price).then((data) => {
+      setDataZalo(data)
+      setReCall(true)
+      setCount(count + 1);
       Linking.openURL(data?.result?.order_url);
-      const callBank = setInterval(() => {
-        checkStatus(data?.appTransId, data?.appTime).then(
-          (data) => {
-             console.log(data?.status);
-            if(data?.status === 1){
-              createOrderMethod(dataPayload)
-              .then((data) => {
-                depatch(SetPromotion([]));
-                clearInterval(callBank);
-                navigation.navigate("HomePage");
-                navigation.navigate("TicketBooked");
-              })
-              .catch(() => {});
-            }else if(data?.status === 2){
-              alert("Thanh toán thất bại")
-             clearInterval(callBank)
-            }
-            // if (data?.status === 2) {
-            //   createOrderMethod(dataPayload)
-            //     .then((data) => {
-            //       depatch(SetPromotion([]));
-            //       clearInterval(callBank);
-            //       navigation.navigate("HomePage");
-            //       navigation.navigate("TicketBooked");
-            //     })
-            //     .catch(() => {});
-            // }
-          }
-        );
-      }, 2000);
+      // callBank = setInterval(() => {
+      //   checkStatus(data?.appTransId, data?.appTime).then(
+      //     (data) => {
+      //        console.log(data?.status);
+      //       if(data?.status === 1){
+      //         createOrderMethod(dataPayload)
+      //         .then((data) => {
+      //           depatch(SetPromotion([]));
+      //           clearInterval(callBank);
+      //           navigation.navigate("HomePage");
+      //           navigation.navigate("TicketBooked");
+      //         })
+      //         .catch(() => {});
+      //       }else if(data?.status === 2){
+      //         alert("Thanh toán thất bại")
+      //        clearInterval(callBank)
+      //       }
+      //     }
+      //   );
+      // }, 2000);
     });
   };
-  // console.log(promotion);
-  const handleShowPromotion = () => {
 
-      navigation.navigate("PromotionScreen", { promotion });
-    
+  const reCallStatus = (appTransId, appTime, dataPayload ) => {
+    checkStatus(appTransId, appTime).then(
+      (data) => {
+         console.log(data?.status);
+        if(data?.status === 1){
+          createOrderMethod(dataPayload)
+          .then((data) => {
+            depatch(SetPromotion([]));
+            navigation.navigate("HomePage");
+            navigation.navigate("TicketBooked");
+          })
+          .catch(() => {});
+        }else if(data?.status === 2){
+          alert("Thanh toán thất bại")
+        }
+      }
+    );
+  }
+  useEffect(() => {
+    //Implementing the setInterval method
+    if(reCall) {
+      const interval = setInterval(() => {
+        reCallStatus(dataZalo?.appTransId, dataZalo?.appTime, dataOrder)
+        setCount(count + 1);
+      }, 2000);
+  
+      //Clearing the interval
+      return () => clearInterval(interval);
+    }
+}, [count]);
+
+
+  const handleShowPromotion = () => {
+    navigation.navigate("PromotionScreen", { promotion });
   };
+
   const handleClickZaloPay = () => {
     setSelectedId(!selectedId)
   }
+
   return {
     seats,
     film,
